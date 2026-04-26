@@ -1,0 +1,44 @@
+
+import pygame
+import sys
+
+pygame.init()
+screen = pygame.display.set_mode((1000, 700), pygame.RESIZABLE)
+pygame.display.set_caption("Group 7 Mini IT")
+font = pygame.font.SysFont(None, 80)
+
+menu = ["Join", "Exit"]
+selected = 0
+
+while True:
+    width, height = screen.get_size()
+    font_size = width // 9
+
+    font = pygame.font.SysFont(None, font_size)
+
+    screen.fill((0, 0, 0))
+
+    for i, item in enumerate(menu):
+        color = (255, 0, 0) if i == selected else (255, 255, 255)
+        text = font.render(item, True, color)
+        text_x = width // 2 - text.get_width() // 2
+        text_y = height // 3 + i * (font_size + 20)
+        
+        screen.blit(text, (text_x, text_y))
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_UP:
+                selected = (selected - 1) % len(menu)
+            if event.key == pygame.K_DOWN:
+                selected = (selected + 1) % len(menu)
+            if event.key == pygame.K_RETURN:
+                print(menu[selected])
+                if menu[selected] == "Exit":
+                    pygame.quit()
+                    sys.exit()
+
+    pygame.display.update()
