@@ -1,8 +1,8 @@
-const menu = ["Join", "Exit"];
+const menu = ["Join", "Data", "Exit"];
 let selected = 0;
 let running = true;
 
-document.title = "Group 7 Mini IT";
+document.title = "Mini Gardening Pets Edition";
 
 const canvas = document.createElement("canvas");
 const ctx = canvas.getContext("2d");
@@ -12,25 +12,25 @@ document.body.style.backgroundColor = "black";
 document.body.appendChild(canvas);
 
 function resizeCanvas() {
-  canvas.width = window.innerWidth || 1000;
-  canvas.height = window.innerHeight || 700;
+  canvas.width = window.innerWidth || 1920;
+  canvas.height = window.innerHeight || 1080;
 }
 
 function drawMenu() {
   const width = canvas.width;
   const height = canvas.height;
-  const fontSize = Math.floor(width / 9);
 
   ctx.fillStyle = "black";
   ctx.fillRect(0, 0, width, height);
 
-  ctx.font = `${fontSize}px sans-serif`;
+  ctx.font = "100px sans-serif";
   ctx.textAlign = "center";
   ctx.textBaseline = "top";
 
+
   menu.forEach((item, index) => {
-    ctx.fillStyle = index === selected ? "red" : "yellow";
-    const textY = Math.floor(height / 3) + index * (fontSize + 20);
+    ctx.fillStyle = index === selected ? "lightgreen" : "white";
+    const textY = Math.floor(height / 3.5) + index * 130;
     ctx.fillText(item, Math.floor(width / 2), textY);
   });
 }
@@ -39,13 +39,35 @@ function handleSelection() {
   const choice = menu[selected];
   console.log(choice);
 
-  if (choice === "Exit") {
-    running = false;
-    window.removeEventListener("keydown", handleKeyDown);
-    ctx.fillStyle = "black";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  if (choice === "Join") {
+
   }
+  else if (choice === "Data") {
+
+  }
+
+else if (choice === "Exit") {
+  running = false;
+  showExitScreen();
 }
+
+}
+
+function showExitScreen() {
+  document.body.innerHTML = "";
+  document.body.style.backgroundColor = "black";
+
+  const message = document.createElement("h1");
+  message.textContent = "Game Over";
+  message.style.color = "red";
+  message.style.textAlign = "center";
+  message.style.marginTop = "20%";
+  message.style.fontFamily = "sans-serif";
+  message.style.fontSize = "150px";
+
+  document.body.appendChild(message);
+}
+
 
 function handleKeyDown(event) {
   if (!running) {
