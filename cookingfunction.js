@@ -12,11 +12,11 @@ function startCooking(index) {
   const resultText = document.createElement("p");
   resultText.innerText = "try to hit 40 - 60 to get Excellent";
 
-  slider.oninput = () =>{
+  slider.oninput = () => {
     valueText.innerText ="Value:" + slider.value;
     if (slider.value >= 40 && slider.value <= 60) {
       resultText.innerText = "Excellent ";
-    }   else if (slider.value >= 30 && slider.valu <= 70) {
+    }   else if (slider.value >= 30 && slider.value <= 70) {
       resultText.innerText = "Great ";
     }   else{
       resultText.innerText = "Bad ";
@@ -27,22 +27,20 @@ function startCooking(index) {
   btn.innerText = "Cook";
 
   btn.onclick = () => {
-    let foodQuanlity;
+    let foodQuality;
+
     if (slider.value >= 40 && slider.value <= 60) {
       foodQuality = "Excellent Food ";
-    } else if (slider.value >= 30 && slider.valu <= 70) {
+    } else if (slider.value >= 30 && slider.value <= 70) {
       foodQuality = "Good Food ";
     } else {
       foodQuality = "Bad Food ";
     }
     resultText.innerText ="Cook Successful! You made: " + foodQuality;
-    finishCooking(index, slider.value);
+
+    setTimeout(() => box.remove(), 2000);
   };
 
   box.append(valueText, resultText, slider, btn);
-  document.body.appendChild(box);
-
-  btn.addEventListener("click", () => {
-    setTimeout(() => box.remove(), 6000);
-  });
+  document.querySelector(".game-box").appendChild(box);
 }
