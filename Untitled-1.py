@@ -19,7 +19,7 @@ while True:
     screen.fill((0, 0, 0))
 
     for i, item in enumerate(menu):
-        color = (255, 0, 0) if i == selected else (255, 255, 0)
+        color = (255, 0, 0) if i == selected else (255, 255, 255)
         text = font.render(item, True, color)
         text_x = width // 2 - text.get_width() // 2
         text_y = height // 3 + i * (font_size + 20)
