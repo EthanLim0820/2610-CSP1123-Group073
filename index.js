@@ -13,7 +13,7 @@ const foregroundImage = new Image()
 foregroundImage.src = './mini it/image/foregroundObjects.png'
 
 const playerDownImage = new Image()
-playerDownImage.src = './mini it/image/playerRight.png'
+playerDownImage.src = './mini it/image/playerDown.png'
 
 const playerUpImage = new Image()
 playerUpImage.src = './mini it/image/playerUp.png'
