@@ -7,22 +7,22 @@ canvas.width = 1024
 canvas.height = 576
 
 const image = new Image()
-image.src = './image/gardening map.png'
+image.src = './mini it/image/gardening map.png'
 
 const foregroundImage = new Image()
-foregroundImage.src = './image/foregroundObjects.png'
+foregroundImage.src = './mini it/image/foregroundObjects.png'
 
 const playerDownImage = new Image()
-playerDownImage.src = './image/playerDown.png'
+playerDownImage.src = './mini it/image/playerRight.png'
 
 const playerUpImage = new Image()
-playerUpImage.src = './image/playerUp.png'
+playerUpImage.src = './mini it/image/playerUp.png'
 
 const playerLeftImage = new Image()
-playerLeftImage.src = './image/playerLeft.png'
+playerLeftImage.src = './mini it/image/playerLeft.png'
 
 const playerRightImage = new Image()
-playerRightImage.src = './image/playerRight.png'
+playerRightImage.src = './mini it/image/playerRight.png'
 
 
 const collisionsMap = []
