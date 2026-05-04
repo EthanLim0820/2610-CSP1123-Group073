@@ -62,6 +62,35 @@
                 width: 100%;
                 margin-top: 10px;
             }
+
+            select {
+                background: #ffd166;
+                color: #333;
+                border: none;
+                border-radius: 10px;
+                padding: 6px 12px;
+                font-weight: bold;
+                box-shadow: 2px 2px #5a8f4c;
+            }
+
+            select:hover {
+                background: #a8e6a3;
+            }
+
+            select {
+                appearance: none;
+                -webkit-appearance: none;
+                -moz-appearance: none;
+            }
+
+            .music-frame {
+                display: none;
+                width: 420px;
+                height: 250px;
+                margin: 20px auto;
+                border: 3px solid #d4a373;
+                border-radius: 12px;
+            }
         </style>
         </head>
 
@@ -71,10 +100,29 @@
             <button class="start-btn" onclick="startCooking(1)">
                 Start Cooking
             </button>
+            <br>
+            <button class="music-btn" onclick="toggleMusic()"> Music</button>
             <div class="game-box">
                 <p>Cook the food perfectly!</p>
             </div>
 
+            <iframe
+            id="musicFrame"
+            class:"music-frame"
+            src="https://strudel.cc/#Ly8gUHJlYmFrZSBzY3JpcHQKLy8KLy8gVGhpcyBpcyBjb2RlIHRoYXQgaXMgbG9hZGVkIGJlZm9yZSB5b3VyIHBhdHRlcm4gaXMgcnVuLgovLyBZb3UgY2FuIHVzZSBpdCB0byBkZWZpbmUgY3VzdG9tIGZ1bmN0aW9ucyB0byB1c2UgaW4gYW55IHBhdHRlcm4uCi8vIAovLyBUaGlzIGlzIGFuIGluaXRpYWwgZXhhbXBsZSBzY3JpcHQuIFlvdSBjYW4gZWRpdCBpdCB0byBhZGQgCi8vIHlvdXIgb3duIGZ1bnRpb25zLgovLwovLyBUbyB1c2UgYSBzY3JpcHQgc2hhcmVkIGJ5IHNvbWUgb3RoZXIgdXNlciB5b3UgY2FuIHVzZQovLyB0aGUgaW1wb3J0LWJ1dHRvbiBvciBwYXN0ZSB0aGUgc2NyaXB0IGluIHRoaXMgZWRpdG9yLgoKY29uc3QgcmF0Y2hldCA9IHJlZ2lzdGVyKCdyYXRjaGV0JywgKHBhdCkgPT4gcGF0LnNvbWV0aW1lcyhwbHkoMikpKQoKc2V0Y3BzKDAuNzUpCgpzdGFjaygKICAvLyBraXRjaGVuIGJlYXQKICBzKCJiZCB%2BIHNkIH4gYmQgfiBzZCB%2BIikKICAgIC5iYW5rKCJ0cjkwOSIpCiAgICAuZ2FpbigwLjgpLAoKICAvLyBzbWFsbCBjb29raW5nIHRpY2tzCiAgcygiaGgqOCIpCiAgICAuYmFuaygidHI5MDkiKQogICAgLmdhaW4oMC4yNSksCgogIC8vIGN1dGUgbWVsb2R5CiAgbm90ZSgiYzUgZTUgZzUgZTUgZDUgZjUgYTUgZjUiKQogICAgLnNvdW5kKCJwaWFubyIpCiAgICAuZ2FpbigwLjYpCiAgICAucm9vbSgwLjMpLAoKICAvLyBzb2Z0IGJhc3MKICBub3RlKCJjMyB%2BIGcyIH4gYTIgfiBmMiB%2BIikKICAgIC5zb3VuZCgic2F3dG9vdGgiKQogICAgLmdhaW4oMC4yNSkKICAgIC5scGYoNTAwKQop" 
+        ></iframe>
+
             <script src="cookingfunction.js"></script>
+
+            <script>
+                function toggleMusic() {
+                    const frame = document.getElementById("musicFrame");
+                    
+                    frame.style.display ="block";
+                    setTimeout(() => {
+                        frame.style.display = "none";
+                    }, 2500);
+                }
+            </script>
         </body>
 </html>
