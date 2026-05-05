@@ -40,7 +40,7 @@ function handleSelection() {
   console.log(choice);
 
   if (choice === "Join") {
-
+    window.location.href = "index.html";
   }
   else if (choice === "Data") {
 
