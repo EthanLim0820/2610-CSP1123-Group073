@@ -9,6 +9,7 @@ canvas.height = 576
 const backgroundMusic = new Audio('./mini it/music/mini it music.mp3')
 backgroundMusic.loop = true
 backgroundMusic.volume = 0.10
+backgroundMusic.play()
 
 function playBackgroundMusic() {
     const playPromise = backgroundMusic.play()
@@ -22,6 +23,7 @@ function playBackgroundMusic() {
 }
 
 playBackgroundMusic()
+
 
 const image = new Image()
 image.src = './mini it/image/gardening map.png'

@@ -11,6 +11,24 @@ document.body.style.overflow = "hidden";
 document.body.style.backgroundColor = "black";
 document.body.appendChild(canvas);
 
+const backgroundMusic = new Audio('./mini it/music/startupmusic.mp3')
+backgroundMusic.loop = true
+backgroundMusic.volume = 0.10
+backgroundMusic.play()
+
+function playBackgroundMusic() {
+    const playPromise = backgroundMusic.play()
+
+    if (playPromise) {
+        playPromise.catch(() => {
+            window.addEventListener('keydown', playBackgroundMusic, {once: true})
+            window.addEventListener('click', playBackgroundMusic, {once: true})
+        })
+    }
+}
+
+playBackgroundMusic()
+
 function resizeCanvas() {
   canvas.width = window.innerWidth || 1920;
   canvas.height = window.innerHeight || 1080;
