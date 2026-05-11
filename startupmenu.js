@@ -16,7 +16,10 @@ backgroundImage.src = "./mini it/image/gardening map.png";
 
 const background = {
   x: -400,
-  y: -515
+  y: -515,
+  speed: 0.3,
+  minX: -500,
+  maxX: -300
 };
 
 const backgroundMusic = new Audio('./mini it/music/startupmusic.mp3')
@@ -42,6 +45,14 @@ function resizeCanvas() {
   canvas.height = window.innerHeight || 1080;
 }
 
+function moveBackground() {
+  background.x += background.speed;
+
+  if (background.x <= background.minX || background.x >= background.maxX) {
+    background.speed *= -1;
+  }
+}
+
 function drawMenu() {
   const width = canvas.width;
   const height = canvas.height;
@@ -50,9 +61,8 @@ function drawMenu() {
   c.fillRect(0, 0, width, height);
 
   if (backgroundImage.complete && backgroundImage.width !== 0) {
+    moveBackground();
     c.drawImage(backgroundImage, background.x, background.y);
-    c.fillStyle = "rgba(0, 0, 0, 0.45)";
-    c.fillRect(0, 0, width, height);
   }
 
   c.font = "100px sans-serif";

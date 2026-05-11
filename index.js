@@ -3,8 +3,14 @@ const c = canvas.getContext('2d')
 
 document.title = "Mini Gardening Pets Edition";
 
+document.body.style.margin = '0'
+document.body.style.overflow = 'hidden'
+
 canvas.width = 1024
 canvas.height = 576
+canvas.style.width = '100vw'
+canvas.style.height = '100vh'
+canvas.style.display = 'block'
 
 const backgroundMusic = new Audio('./mini it/music/mini it music.mp3')
 backgroundMusic.loop = true
