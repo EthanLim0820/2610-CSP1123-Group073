@@ -102,11 +102,12 @@ else if (choice === "Exit") {
 
 function showExitScreen() {
   document.body.innerHTML = "";
-  document.body.style.backgroundColor = "black";
+  document.body.style.backgroundColor = "#ff5252";
 
   const message = document.createElement("h1");
   message.textContent = "Game Over";
-  message.style.color = "red";
+  message.style.color = "#ffffff";
+  message.style.webkitTextStroke = "5px #6c6c76";
   message.style.textAlign = "center";
   message.style.marginTop = "20%";
   message.style.fontFamily = "sans-serif";
