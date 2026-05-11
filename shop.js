@@ -14,12 +14,16 @@ function buyItem(itemName) {
 
         money -= item.price;
 
-        console.log("You bought " + item.name);
-        console.log("Money left: " + money);
+        document.getElementById("moneyText").innerText =
+        "Money: " + money;
+
+        document.getElementById("resultText").innerText =
+        "You bought " + item.name;
 
     } else {
 
-        console.log("Not enough money!");
+        document.getElementById("resultText").innerText =
+        "Not enough money!";
 
     }
 }
