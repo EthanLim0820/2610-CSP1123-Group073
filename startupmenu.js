@@ -122,9 +122,9 @@ function handleKeyDown(event) {
     return;
   }
 
-  if (event.key === "ArrowUp") {
+  if (event.key === "w") {
     selected = (selected - 1 + menu.length) % menu.length;
-  } else if (event.key === "ArrowDown") {
+  } else if (event.key === "s") {
     selected = (selected + 1) % menu.length;
   } else if (event.key === "Enter") {
     handleSelection();
