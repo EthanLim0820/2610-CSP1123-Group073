@@ -17,7 +17,7 @@ backgroundImage.src = "./mini it/image/gardening map.png";
 const background = {
   x: -400,
   y: -515,
-  speed: 0.3,
+  speed: 0.1,
   minX: -500,
   maxX: -300
 };
@@ -25,6 +25,7 @@ const background = {
 const backgroundMusic = new Audio('./mini it/music/startupmusic.mp3')
 backgroundMusic.loop = true
 backgroundMusic.volume = 0.10
+
 backgroundMusic.play()
 
 function playBackgroundMusic() {
