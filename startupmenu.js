@@ -122,11 +122,11 @@ function handleKeyDown(event) {
     return;
   }
 
-  if (event.key === "w") {
+  if (event.key === "w" || event.key === "ArrowUp") {
     selected = (selected - 1 + menu.length) % menu.length;
-  } else if (event.key === "s") {
+  } else if (event.key === "s" || event.key === "ArrowDown") {
     selected = (selected + 1) % menu.length;
-  } else if (event.key === "Enter") {
+  } else if (event.key === "Enter" || event.key === " ") {
     handleSelection();
   }
 }
