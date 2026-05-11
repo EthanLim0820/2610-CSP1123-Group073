@@ -70,11 +70,15 @@ function drawMenu() {
   c.textAlign = "center";
   c.textBaseline = "top";
 
-
   menu.forEach((item, index) => {
-    c.fillStyle = index === selected ? "lightgreen" : "white";
     const textY = Math.floor(height / 3.5) + index * 130;
-    c.fillText(item, Math.floor(width / 2), textY);
+    const textX = Math.floor(width / 2);
+
+    c.lineWidth = 5;
+    c.strokeStyle = "#6c6c76";
+    c.strokeText(item, textX, textY);
+    c.fillStyle = index === selected ? "#ff6767" : "#ffffff";
+    c.fillText(item, textX, textY);
   });
 }
 
@@ -132,6 +136,7 @@ function gameLoop() {
   }
 
   drawMenu();
+
   requestAnimationFrame(gameLoop);
 }
 
