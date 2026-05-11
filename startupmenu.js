@@ -5,11 +5,19 @@ let running = true;
 document.title = "Mini Gardening Pets Edition";
 
 const canvas = document.createElement("canvas");
-const ctx = canvas.getContext("2d");
+const c = canvas.getContext("2d");
 document.body.style.margin = "0";
 document.body.style.overflow = "hidden";
 document.body.style.backgroundColor = "black";
 document.body.appendChild(canvas);
+
+const backgroundImage = new Image();
+backgroundImage.src = "./mini it/image/gardening map.png";
+
+const background = {
+  x: -400,
+  y: -515
+};
 
 const backgroundMusic = new Audio('./mini it/music/startupmusic.mp3')
 backgroundMusic.loop = true
@@ -38,18 +46,24 @@ function drawMenu() {
   const width = canvas.width;
   const height = canvas.height;
 
-  ctx.fillStyle = "black";
-  ctx.fillRect(0, 0, width, height);
+  c.fillStyle = "black";
+  c.fillRect(0, 0, width, height);
 
-  ctx.font = "100px sans-serif";
-  ctx.textAlign = "center";
-  ctx.textBaseline = "top";
+  if (backgroundImage.complete && backgroundImage.width !== 0) {
+    c.drawImage(backgroundImage, background.x, background.y);
+    c.fillStyle = "rgba(0, 0, 0, 0.45)";
+    c.fillRect(0, 0, width, height);
+  }
+
+  c.font = "100px sans-serif";
+  c.textAlign = "center";
+  c.textBaseline = "top";
 
 
   menu.forEach((item, index) => {
-    ctx.fillStyle = index === selected ? "lightgreen" : "white";
+    c.fillStyle = index === selected ? "lightgreen" : "white";
     const textY = Math.floor(height / 3.5) + index * 130;
-    ctx.fillText(item, Math.floor(width / 2), textY);
+    c.fillText(item, Math.floor(width / 2), textY);
   });
 }
 
