@@ -57,10 +57,32 @@ function startCooking(index) {
     }
   };
 
+  let direction = 1;
+
+  const moveSlider = setInterval(() => {
+    let value = Number(slider.value);
+    value += direction;
+
+    if (value >= 100) {
+      direction = -1;
+    }
+
+    else if (value <= 0){
+      direction = 1;
+    }
+
+    slider.value = value;
+    slider.oninput();
+
+  }, 15);
+
+
   const btn = document.createElement("button");
   btn.innerText = "Cook";
 
   btn.onclick = () => {
+
+    clearInterval(moveSlider);
     btn.disabled = true;
     slider.disabled = true;
 
