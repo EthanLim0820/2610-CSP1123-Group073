@@ -1,3 +1,51 @@
+let cookedInventory =
+JSON.parse(localStorage.getItem("cookedInventory")) || [];
+
+function saveCookedInventory(){
+    localStorage.setItem(
+        "cookedInventory",
+        JSON.stringify(cookedInventory)
+    );
+}
+
+function addToCookedInventory(foodName){
+    cookedInventory.push(foodName);
+
+    saveCookedInventory();
+
+    showCookedInventory();
+}
+
+function showCookedInventory(){
+
+    const inventoryBox =
+    document.getElementById("inventoryBox");
+
+    inventoryBox.innerHTML = "";
+
+    let itemCount = {};
+
+    for(let item of cookedInventory){
+
+        if(itemCount[item]){
+            itemCount[item]++;
+        } else {
+            itemCount[item] = 1;
+        }
+    }
+
+    for(let item in itemCount){
+
+        inventoryBox.innerHTML +=
+        "<div class='item-box'>" +
+            "<h3>" + item + "</h3>" +
+            "<p>Amount: " + itemCount[item] + "</p>" +
+        "</div>";
+    }
+}
+
+showCookedInventory();
+
 function startCooking(index) {
   const box = document.createElement("div");
   box.className = "cookUI";
@@ -104,6 +152,10 @@ function startCooking(index) {
       resultText.style.color = "#E53935";
     }
     resultText.innerText = "Cook Successful! You made: " + selectedFood + " ("+ foodQuality + ") [" + selectWetness + ", " + selectedSize + "]";
+    
+    addToCookedInventory(
+    selectedFood + " (" + foodQuality + ") [" + selectWetness + ", " + selectedSize + "]"
+);
 
     setTimeout(() => box.remove(), 2000);
   };
