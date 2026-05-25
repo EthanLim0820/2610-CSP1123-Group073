@@ -156,10 +156,17 @@ function startCooking(index) {
     addToCookedInventory(
     selectedFood + " (" + foodQuality + ") [" + selectWetness + ", " + selectedSize + "]"
 );
-
     setTimeout(() => box.remove(), 2000);
   };
 
   box.append(foodselect, wetnessSelect, sizeSelect, valueText, resultText, slider, btn);
   document.querySelector(".game-box").appendChild(box);
 }
+
+    function resetCookedGame(){
+
+    localStorage.removeItem("cookedInventory");
+
+    location.reload();
+
+} 
