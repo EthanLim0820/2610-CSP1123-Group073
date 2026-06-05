@@ -94,11 +94,22 @@ function showInventory(){
 }
 
 for(let item in itemCount){
-    inventoryBox.innerHTML += 
-    "<div class='item-box'>" +
-        "<h3>" + item + "</h3>" +
-    "<p>Amount: " + itemCount[item] +"</p>" +
-    "</div>";
+
+    let imageName = item.toLowerCase();
+    inventoryBox.innerHTML += `
+        <div class="item-box">
+
+            <img
+                    src="image/${imageName}.png"
+                    alt="${item}"
+                    class="item-image"
+            >
+            <h3>${item}</h3>
+
+            <p>Amount: ${itemCount[item]}</p>
+
+        </div>
+        `;
     } 
 }
 
