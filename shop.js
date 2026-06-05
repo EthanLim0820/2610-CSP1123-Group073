@@ -1,3 +1,18 @@
+const bgMusic = new Audio("audio/shopMusic.mp3");
+bgMusic.loop = true;
+bgMusic.volume = 0.3;
+
+const buySound = new Audio("audio/buy.mp3");
+buySound.volume = 0.5;
+
+document.addEventListener("click", () => {
+
+    if (bgMusic.paused) {
+        bgMusic.play();
+    }
+
+}, { once: true });
+
 let money =
 Number(localStorage.getItem("money")) || 100;
 
@@ -25,6 +40,9 @@ function buyItem(itemName) {
 
     if (money >= item.price) {
 
+        buySound.currentTime = 0;
+        buySound.play();
+
         money -= item.price;
         inventory.push(item.name);
 
@@ -32,8 +50,6 @@ function buyItem(itemName) {
         localStorage.setItem( "money", money );
 
         showInventory();
-
-        inventory.push(item.name);
 
         localStorage.setItem(
             "inventory",
@@ -84,6 +100,15 @@ for(let item in itemCount){
     "<p>Amount: " + itemCount[item] +"</p>" +
     "</div>";
     } 
+}
+
+function toggleMusic() {
+
+    if (bgMusic.paused) {
+        bgMusic.play();
+    } else {
+        bgMusic.pause();
+    }
 }
 
 function resetGame(){
