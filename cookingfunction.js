@@ -1,3 +1,20 @@
+const bgMusic = new Audio("audio/cookingMusic.mp3");
+
+bgMusic.loop = true;
+bgMusic.volume = 0.3;
+
+const cookSound = new Audio("audio/cook.mp3");
+
+cookSound.volume = 0.5;
+
+document.addEventListener("click", () => {
+
+    if(bgMusic.paused){
+        bgMusic.play();
+    }
+
+}, { once: true });
+
 let cookedInventory =
 JSON.parse(localStorage.getItem("cookedInventory")) || [];
 
@@ -36,17 +53,30 @@ function showCookedInventory(){
 
     for(let item in itemCount){
 
-        inventoryBox.innerHTML +=
-        "<div class='item-box'>" +
-            "<h3>" + item + "</h3>" +
-            "<p>Amount: " + itemCount[item] + "</p>" +
-        "</div>";
+      let imageName =
+      item.split(" (")[0].toLowerCase();
+        
+      inventoryBox.innerHTML += `
+        <div class="inventory-item">
+
+                <img src="image/${imageName}.png">
+
+                <h3>${item}</h3>
+
+                <p>Amount: ${itemCount[item]}</p>
+
+            </div>
+      `;
     }
 }
 
 showCookedInventory();
 
 function startCooking(index) {
+
+  cookSound.currentTime = 0;
+  cookSound.play();
+
   const box = document.createElement("div");
   box.className = "cookUI";
 
@@ -170,3 +200,14 @@ function startCooking(index) {
     location.reload();
 
 } 
+
+function toggleMusic(){
+
+    if(bgMusic.paused){
+        bgMusic.play();
+    }
+    else{
+        bgMusic.pause();
+    }
+
+}
