@@ -105,10 +105,15 @@
             <div class="game-box">
                 <p>Cook the food perfectly!</p>
             </div>
+            <h2>Cooked Inventory</h2>
+            <div id="inventoryBox"></div>
 
+            <button onclick="resetCookedGame()">
+                Reset Cooked Inventory
+            </button>
             <iframe
             id="musicFrame"
-            class:"music-frame"
+            class="music-frame"
             src="https://strudel.cc/#Ly8gUHJlYmFrZSBzY3JpcHQKLy8KLy8gVGhpcyBpcyBjb2RlIHRoYXQgaXMgbG9hZGVkIGJlZm9yZSB5b3VyIHBhdHRlcm4gaXMgcnVuLgovLyBZb3UgY2FuIHVzZSBpdCB0byBkZWZpbmUgY3VzdG9tIGZ1bmN0aW9ucyB0byB1c2UgaW4gYW55IHBhdHRlcm4uCi8vIAovLyBUaGlzIGlzIGFuIGluaXRpYWwgZXhhbXBsZSBzY3JpcHQuIFlvdSBjYW4gZWRpdCBpdCB0byBhZGQgCi8vIHlvdXIgb3duIGZ1bnRpb25zLgovLwovLyBUbyB1c2UgYSBzY3JpcHQgc2hhcmVkIGJ5IHNvbWUgb3RoZXIgdXNlciB5b3UgY2FuIHVzZQovLyB0aGUgaW1wb3J0LWJ1dHRvbiBvciBwYXN0ZSB0aGUgc2NyaXB0IGluIHRoaXMgZWRpdG9yLgoKY29uc3QgcmF0Y2hldCA9IHJlZ2lzdGVyKCdyYXRjaGV0JywgKHBhdCkgPT4gcGF0LnNvbWV0aW1lcyhwbHkoMikpKQoKc2V0Y3BzKDAuNzUpCgpzdGFjaygKICAvLyBraXRjaGVuIGJlYXQKICBzKCJiZCB%2BIHNkIH4gYmQgfiBzZCB%2BIikKICAgIC5iYW5rKCJ0cjkwOSIpCiAgICAuZ2FpbigwLjgpLAoKICAvLyBzbWFsbCBjb29raW5nIHRpY2tzCiAgcygiaGgqOCIpCiAgICAuYmFuaygidHI5MDkiKQogICAgLmdhaW4oMC4yNSksCgogIC8vIGN1dGUgbWVsb2R5CiAgbm90ZSgiYzUgZTUgZzUgZTUgZDUgZjUgYTUgZjUiKQogICAgLnNvdW5kKCJwaWFubyIpCiAgICAuZ2FpbigwLjYpCiAgICAucm9vbSgwLjMpLAoKICAvLyBzb2Z0IGJhc3MKICBub3RlKCJjMyB%2BIGcyIH4gYTIgfiBmMiB%2BIikKICAgIC5zb3VuZCgic2F3dG9vdGgiKQogICAgLmdhaW4oMC4yNSkKICAgIC5scGYoNTAwKQop" 
         ></iframe>
 
@@ -123,6 +128,7 @@
                         frame.style.display = "none";
                     }, 2500);
                 }
+
             </script>
         </body>
 </html>

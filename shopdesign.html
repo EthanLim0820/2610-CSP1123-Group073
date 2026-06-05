@@ -57,6 +57,14 @@
             background: darkorange;
         }
 
+        #inventoryBox{
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }   
+
     </style>
 </head>
 <body>
@@ -144,45 +152,15 @@
 
     <p id="resultText"></p>
 
-    <script>
+    <h2>Inventory</h2>
 
-        let money = 100;
+    <div id="inventoryBox"></div>
 
-        const shopItems = [
-            { name: "Fish", price: 10 },
-            { name: "Meat", price: 25 },
-            { name: "Carrot", price: 20 },
-            { name: "Corn", price: 10 },
-            { name: "Seed", price: 20 },
-            { name: "Lettuce", price: 15 },
-            { name: "Wheat", price: 10},
-            { name: "Grass", price: 10},
-        ];
+<button onclick="resetGame()">
+        Reset Game
+        </button>
 
-        function buyItem(itemName){
-
-            const item = shopItems.find(i => i.name === itemName);
-
-            if(money >= item.price){
-
-                money -= item.price;
-
-                document.getElementById("moneyText").innerText =
-                "Money: " + money;
-
-                document.getElementById("resultText").innerText =
-                "You bought " + item.name;
-
-            } else {
-
-                document.getElementById("resultText").innerText =
-                "Not enough money!";
-
-            }
-
-        }
-
-    </script>
-
+<script src="shop.js"></script>
+    
 </body>
 </html>

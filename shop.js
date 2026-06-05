@@ -1,7 +1,7 @@
 let money =
 Number(localStorage.getItem("money")) || 100;
 
-let inventory =[]
+let inventory =[] 
 inventory = JSON.parse(localStorage.getItem("inventory")) || [];
 
 const shopItems = [
@@ -10,15 +10,14 @@ const shopItems = [
     { name: "Carrot", price: 20 },
     { name: "Corn", price: 10 },
     { name: "Seed", price: 20 },
-    { name: "Lettuce", price: 15 },
-    { name: "Wheat", price: 10 },
+    { name: "Lettuce", price: 15 }, 
+    { name: "Wheat", price: 10 }, 
     { name: "Grass", price: 10 }
 ];
 
-document.getElementById("moneyText").innerText =
-"Money: " + money;
+document.getElementById("moneyText").innerText = "Money: " + money;
 
-showInventory();
+showInventory()
 
 function buyItem(itemName) {
 
@@ -27,6 +26,12 @@ function buyItem(itemName) {
     if (money >= item.price) {
 
         money -= item.price;
+        inventory.push(item.name);
+
+        localStorage.setItem( "inventory", JSON.stringify(inventory) );
+        localStorage.setItem( "money", money );
+
+        showInventory();
 
         inventory.push(item.name);
 
@@ -57,33 +62,28 @@ function buyItem(itemName) {
 }
 
 function showInventory(){
-
-    const inventoryBox =
-    document.getElementById("inventoryBox");
+    const inventoryBox = document.getElementById("inventoryBox");
 
     inventoryBox.innerHTML = "";
 
     let itemCount = {};
 
     for(let item of inventory){
-
-        if(itemCount[item]){
+        if(itemCount[item]){ 
             itemCount[item]++;
 
-        } else {
-            itemCount[item] =1;
-
-        }
+            } else {
+                 itemCount[item] =1;
     }
-    
-    for(let item in itemCount){
+}
 
-        inventoryBox.innerHTML +=
-        "<div class='item-box'>" +
-            "<h3>" + item + "</h3>" +
-            "<p>Amount: " + itemCount[item] +"</p>" +
-        "</div>";
-    }
+for(let item in itemCount){
+    inventoryBox.innerHTML += 
+    "<div class='item-box'>" +
+        "<h3>" + item + "</h3>" +
+    "<p>Amount: " + itemCount[item] +"</p>" +
+    "</div>";
+    } 
 }
 
 function resetGame(){
@@ -91,5 +91,4 @@ function resetGame(){
     localStorage.clear();
 
     location.reload();
-
 }
