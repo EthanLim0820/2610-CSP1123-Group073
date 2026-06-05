@@ -6,10 +6,14 @@
         <style>
             body {
                 font-family: Arial;
-                background: #87c76e;
                 color: #333;
                 text-align: center;
                 margin: 0;
+                background-image: url("image/cookingBackground.png");
+                background-size: cover;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-attachment: fixed;
             }
 
             h1 {
@@ -91,6 +95,51 @@
                 border: 3px solid #d4a373;
                 border-radius: 12px;
             }
+
+            #inventoryBox{
+                display: flex;
+                justify-content: center;
+                gap: 15px;
+                flex-wrap: wrap;
+                margin-top: 20px;
+            }
+
+            .inventory-item{
+                background: #fff8dc;
+                color: rgb(17, 14, 14);
+                width: 120px;
+                padding: 10px;
+                border-radius: 15px;
+                box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+            }
+
+            .inventory-item img{
+                width: 60px;
+                height: 60px;
+                object-fit: contain;
+            }
+            
+            .inventory-title{
+                color: white;
+                text-shadow: 3px 3px 5px black;
+                font-size: 32px;
+            }
+
+            .music-btn{
+                margin-top: 10px;
+                padding: 10px 20px;
+                font-size: 16px;
+                border: none;
+                border-radius: 10px;
+                background: #ffd166;
+                color: #333;
+                cursor: pointer;
+            }
+
+            .music-btn:hover{
+                background: #ffb703;
+            }
+
         </style>
         </head>
 
@@ -105,30 +154,14 @@
             <div class="game-box">
                 <p>Cook the food perfectly!</p>
             </div>
-            <h2>Cooked Inventory</h2>
+            <h2 class="inventory-title">Cooked Inventory</h2>
             <div id="inventoryBox"></div>
 
             <button onclick="resetCookedGame()">
                 Reset Cooked Inventory
             </button>
-            <iframe
-            id="musicFrame"
-            class="music-frame"
-            src="https://strudel.cc/#Ly8gUHJlYmFrZSBzY3JpcHQKLy8KLy8gVGhpcyBpcyBjb2RlIHRoYXQgaXMgbG9hZGVkIGJlZm9yZSB5b3VyIHBhdHRlcm4gaXMgcnVuLgovLyBZb3UgY2FuIHVzZSBpdCB0byBkZWZpbmUgY3VzdG9tIGZ1bmN0aW9ucyB0byB1c2UgaW4gYW55IHBhdHRlcm4uCi8vIAovLyBUaGlzIGlzIGFuIGluaXRpYWwgZXhhbXBsZSBzY3JpcHQuIFlvdSBjYW4gZWRpdCBpdCB0byBhZGQgCi8vIHlvdXIgb3duIGZ1bnRpb25zLgovLwovLyBUbyB1c2UgYSBzY3JpcHQgc2hhcmVkIGJ5IHNvbWUgb3RoZXIgdXNlciB5b3UgY2FuIHVzZQovLyB0aGUgaW1wb3J0LWJ1dHRvbiBvciBwYXN0ZSB0aGUgc2NyaXB0IGluIHRoaXMgZWRpdG9yLgoKY29uc3QgcmF0Y2hldCA9IHJlZ2lzdGVyKCdyYXRjaGV0JywgKHBhdCkgPT4gcGF0LnNvbWV0aW1lcyhwbHkoMikpKQoKc2V0Y3BzKDAuNzUpCgpzdGFjaygKICAvLyBraXRjaGVuIGJlYXQKICBzKCJiZCB%2BIHNkIH4gYmQgfiBzZCB%2BIikKICAgIC5iYW5rKCJ0cjkwOSIpCiAgICAuZ2FpbigwLjgpLAoKICAvLyBzbWFsbCBjb29raW5nIHRpY2tzCiAgcygiaGgqOCIpCiAgICAuYmFuaygidHI5MDkiKQogICAgLmdhaW4oMC4yNSksCgogIC8vIGN1dGUgbWVsb2R5CiAgbm90ZSgiYzUgZTUgZzUgZTUgZDUgZjUgYTUgZjUiKQogICAgLnNvdW5kKCJwaWFubyIpCiAgICAuZ2FpbigwLjYpCiAgICAucm9vbSgwLjMpLAoKICAvLyBzb2Z0IGJhc3MKICBub3RlKCJjMyB%2BIGcyIH4gYTIgfiBmMiB%2BIikKICAgIC5zb3VuZCgic2F3dG9vdGgiKQogICAgLmdhaW4oMC4yNSkKICAgIC5scGYoNTAwKQop" 
-        ></iframe>
 
             <script src="cookingfunction.js"></script>
 
-            <script>
-                function toggleMusic() {
-                    const frame = document.getElementById("musicFrame");
-                    
-                    frame.style.display ="block";
-                    setTimeout(() => {
-                        frame.style.display = "none";
-                    }, 2500);
-                }
-
-            </script>
         </body>
 </html>
