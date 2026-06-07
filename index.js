@@ -22,8 +22,8 @@ function playBackgroundMusic() {
 
     if (playPromise) {
         playPromise.catch(() => {
-            window.addEventListener('keydown', playBackgroundMusic, {once: true})
-            window.addEventListener('click', playBackgroundMusic, {once: true})
+            window.addEventListener('keydown', playBackgroundMusic, { once: true })
+            window.addEventListener('click', playBackgroundMusic, { once: true })
         })
     }
 }
@@ -49,17 +49,25 @@ playerLeftImage.src = './mini it/image/playerLeft.png'
 const playerRightImage = new Image()
 playerRightImage.src = './mini it/image/playerRight.png'
 
+const seedImage = new Image()
+seedImage.src = './mini it/image/corps/seed.png'
+
 
 const collisionsMap = []
 for (let i = 0; i < collisions.length; i += 70) {
     collisionsMap.push(collisions.slice(i, 70 + i))
 }
 
+const farmMap = []
+for (let i = 0; i < farm.length; i += 70) {
+    farmMap.push(farm.slice(i, 70 + i))
+}
+
 class Boundary {
     static width = 48
     static height = 48
 
-    constructor({position}) {
+    constructor({ position }) {
         this.position = position
         this.width = 48
         this.height = 48
@@ -72,7 +80,7 @@ class Boundary {
 }
 
 class Sprite {
-    constructor({position, image, frames = {max: 1, hold: 10}, sprites}) {
+    constructor({ position, image, frames = { max: 1, hold: 10 }, sprites }) {
         this.position = position
         this.image = image
         this.frames = {
@@ -120,7 +128,28 @@ class Sprite {
     }
 }
 
+class TileSprite {
+    constructor({ position, image, tileKey }) {
+        this.position = position
+        this.image = image
+        this.tileKey = tileKey
+        this.width = Boundary.width
+        this.height = Boundary.height
+    }
+
+    draw() {
+        c.drawImage(
+            this.image,
+            this.position.x,
+            this.position.y,
+            this.width,
+            this.height
+        )
+    }
+}
+
 const boundaries = []
+const plantedSeeds = []
 const offset = {
     x: -400,
     y: -515
@@ -191,12 +220,12 @@ const keys = {
 }
 
 const movables = [background, ...boundaries, foreground]
-const renderables = [background, ...boundaries, player, foreground]
+const renderables = [background, ...boundaries, ...plantedSeeds, player, foreground]
 
-const horizontalSpeed = 3
-const verticalSpeed = 2.4
+const horizontalSpeed = 5
+const verticalSpeed = 4.4
 
-function rectangularCollision({rectangle1, rectangle2}) {
+function rectangularCollision({ rectangle1, rectangle2 }) {
     return (
         rectangle1.position.x + rectangle1.width >= rectangle2.position.x &&
         rectangle1.position.x <= rectangle2.position.x + rectangle2.width &&
@@ -205,7 +234,7 @@ function rectangularCollision({rectangle1, rectangle2}) {
     )
 }
 
-function move({x, y}) {
+function move({ x, y }) {
     let moving = true
 
     for (let i = 0; i < boundaries.length; i++) {
@@ -236,6 +265,40 @@ function move({x, y}) {
     }
 }
 
+function getPlayerFarmTile() {
+    const playerCenterX = player.position.x + player.width / 2
+    const playerFeetY = player.position.y + player.height - 1
+
+    const column = Math.floor((playerCenterX - background.position.x) / Boundary.width)
+    const row = Math.floor((playerFeetY - background.position.y) / Boundary.height)
+
+    return {
+        row,
+        column,
+        tileKey: `${row}-${column}`
+    }
+}
+
+function plantSeed() {
+    const { row, column, tileKey } = getPlayerFarmTile()
+
+    if (!farmMap[row] || farmMap[row][column] !== 1206) return
+    if (plantedSeeds.some((seed) => seed.tileKey === tileKey)) return
+
+    const seed = new TileSprite({
+        position: {
+            x: column * Boundary.width + background.position.x,
+            y: row * Boundary.height + background.position.y
+        },
+        image: seedImage,
+        tileKey
+    })
+
+    plantedSeeds.push(seed)
+    movables.push(seed)
+    renderables.splice(renderables.indexOf(player), 0, seed)
+}
+
 function animate() {
     window.requestAnimationFrame(animate)
 
@@ -251,19 +314,19 @@ function animate() {
     if (keys.w.pressed && lastKey === 'w') {
         player.animate = true
         player.image = player.sprites.up
-        move({x: 0, y: verticalSpeed})
+        move({ x: 0, y: verticalSpeed })
     } else if (keys.a.pressed && lastKey === 'a') {
         player.animate = true
         player.image = player.sprites.left
-        move({x: horizontalSpeed, y: 0})
+        move({ x: horizontalSpeed, y: 0 })
     } else if (keys.s.pressed && lastKey === 's') {
         player.animate = true
         player.image = player.sprites.down
-        move({x: 0, y: -verticalSpeed})
+        move({ x: 0, y: -verticalSpeed })
     } else if (keys.d.pressed && lastKey === 'd') {
         player.animate = true
         player.image = player.sprites.right
-        move({x: -horizontalSpeed, y: 0})
+        move({ x: -horizontalSpeed, y: 0 })
     }
 }
 
@@ -288,6 +351,9 @@ window.addEventListener('keydown', (event) => {
         case 'd':
             keys.d.pressed = true
             lastKey = 'd'
+            break
+        case 'f':
+            plantSeed()
             break
     }
 })
