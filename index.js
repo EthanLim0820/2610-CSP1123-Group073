@@ -54,12 +54,12 @@ seedImage.src = './mini it/image/corps/seed.png'
 
 
 const collisionsMap = []
-for (let i = 0; i < collisions.length; i += 70) {
+for (let i = 0; i < collisions.length; i += 70) {       // The map data is one long list, so this cuts it into rows of 70 tiles.
     collisionsMap.push(collisions.slice(i, 70 + i))
 }
 
 const farmMap = []
-for (let i = 0; i < farm.length; i += 70) {
+for (let i = 0; i < farm.length; i += 70) {     // This makes farm[row][column] possible when checking planting tiles.
     farmMap.push(farm.slice(i, 70 + i))
 }
 
@@ -102,7 +102,6 @@ class Sprite {
 
     draw() {
         const cropWidth = this.image.width / this.frames.max
-
         c.drawImage(
             this.image,
             cropWidth * this.frames.val,
@@ -117,7 +116,7 @@ class Sprite {
 
         if (!this.animate || this.frames.max <= 1) return
 
-        this.frames.elapsed++
+        this.frames.elapsed++   // Slow walking animation so frame does not change every refresh.
         if (this.frames.elapsed % this.frames.hold === 0) {
             if (this.frames.val < this.frames.max - 1) {
                 this.frames.val++
@@ -265,10 +264,12 @@ function move({ x, y }) {
     }
 }
 
+// Use the player's leg so planting where the character is standing.
 function getPlayerFarmTile() {
     const playerCenterX = player.position.x + player.width / 2
     const playerFeetY = player.position.y + player.height - 1
 
+    // Change the game array to farm array
     const column = Math.floor((playerCenterX - background.position.x) / Boundary.width)
     const row = Math.floor((playerFeetY - background.position.y) / Boundary.height)
 
@@ -282,9 +283,13 @@ function getPlayerFarmTile() {
 function plantSeed() {
     const { row, column, tileKey } = getPlayerFarmTile()
 
+    // Only tile number 1206 can plant seed.
     if (!farmMap[row] || farmMap[row][column] !== 1206) return
+
+    // Stop the same tile from getting more than one seed.
     if (plantedSeeds.some((seed) => seed.tileKey === tileKey)) return
 
+    // Place the seed at top-left corner of that farm tile.
     const seed = new TileSprite({
         position: {
             x: column * Boundary.width + background.position.x,
@@ -296,7 +301,7 @@ function plantSeed() {
 
     plantedSeeds.push(seed)
     movables.push(seed)
-    renderables.splice(renderables.indexOf(player), 0, seed)
+    renderables.splice(renderables.indexOf(player), 0, seed)  // Draw the seed before the player so will not bug
 }
 
 function animate() {
