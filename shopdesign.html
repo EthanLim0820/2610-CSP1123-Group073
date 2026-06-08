@@ -9,9 +9,15 @@
 
         body{
             font-family: Arial;
-            background: #87c76e;
             text-align: center;
             color: white;
+            background-image: url("image/shopbg.png");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            min-height: 100vh;
+            margin: 0;
         }
 
         h1{
@@ -43,6 +49,14 @@
             margin-bottom: 10px;
         }
 
+        .item-image{
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto 10px auto;
+        }
+
         button{
             margin-top: 10px;
             padding: 10px 20px;
@@ -65,6 +79,16 @@
             margin-top: 20px;
         }   
 
+        #inventoryBox .item-box{
+            width: 130px;
+            padding: 10px;
+        }
+
+        #inventoryBox .item-image{
+            width: 60px;
+            height: 60px;
+        }
+
     </style>
 </head>
 <body>
@@ -76,6 +100,7 @@
     <div class="shop-container">
 
         <div class="item-box">
+            <img src="image/fish.png" alt="Fish" class="item-image">
             <h2>Fish</h2>
             <p>Price: 10</p>
 
@@ -85,6 +110,7 @@
         </div>
 
         <div class="item-box">
+            <img src="image/meat.png" alt="Meat" class="item-image">
             <h2>Meat</h2>
             <p>Price: 25</p>
 
@@ -94,6 +120,7 @@
         </div>
 
         <div class="item-box">
+            <img src="image/carrot.png" alt="Carrot" class="item-image">
             <h2>Carrot</h2>
             <p>Price: 20</p>
 
@@ -103,6 +130,7 @@
         </div>
 
          <div class="item-box">
+            <img src="image/corn.png" alt="Corn" class="item-image">
             <h2>Corn</h2>
             <p>Price: 10</p>
 
@@ -112,6 +140,7 @@
         </div>
 
          <div class="item-box">
+            <img src="image/seed.png" alt="Seed" class="item-image">
             <h2>Seed</h2>
             <p>Price: 20</p>
 
@@ -121,6 +150,7 @@
         </div>
 
          <div class="item-box">
+            <img src="image/lettuce.png" alt="Lettuce" class="item-image">
             <h2>Lettuce</h2>
             <p>Price: 15</p>
 
@@ -130,6 +160,7 @@
         </div>
 
          <div class="item-box">
+            <img src="image/wheat.png" alt="Wheat" class="item-image">
             <h2>Wheat</h2>
             <p>Price: 10</p>
 
@@ -139,6 +170,7 @@
         </div>
 
          <div class="item-box">
+            <img src="image/grass.png" alt="Grass" class="item-image">
             <h2>Grass</h2>
             <p>Price: 10</p>
 
@@ -158,6 +190,9 @@
 
 <button onclick="resetGame()">
         Reset Game
+        </button>
+<button onclick="toggleMusic()">
+         Music
         </button>
 
 <script src="shop.js"></script>
