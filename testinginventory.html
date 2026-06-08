@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Inventory</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #000;
+      color: #fff;
+    }
+
+    #panel {
+      display: none;
+      border: 1px solid #fff;
+      padding: 16px;
+      width: 300px;
+    }
+
+    .slot {
+      border: 1px solid #555;
+      padding: 10px;
+      margin: 6px 0;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <button onclick="togglePanel()">Inventory</button>
+
+  <div id="panel">
+    <button onclick="togglePanel()">Close</button>
+    <h3>Inventory</h3>
+    <div id="slots"></div>
+  </div>
+
+  <script src="inventory.js"></script>
+
+</body>
+</html>
