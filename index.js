@@ -347,6 +347,26 @@ function plantSeed() {
     seed.grow()
 }
 
+function removeItem(array, item) {
+    const index = array.indexOf(item)
+
+    if (index !== -1) {
+        array.splice(index, 1)
+    }
+}
+
+function harvestPlant() {
+    const { tileKey } = getPlayerFarmTile()
+    const plant = plantedSeeds.find((seed) => seed.tileKey === tileKey)
+
+    if (!plant) return
+    if (!cropImages.includes(plant.image)) return
+
+    removeItem(plantedSeeds, plant)
+    removeItem(movables, plant)
+    removeItem(renderables, plant)
+}
+
 function animate() {
     window.requestAnimationFrame(animate)
 
@@ -402,6 +422,9 @@ window.addEventListener('keydown', (event) => {
             break
         case 'f':
             plantSeed()
+            break
+        case 'r':
+            harvestPlant()
             break
     }
 })
