@@ -29,14 +29,14 @@ backgroundMusic.volume = 0.10
 backgroundMusic.play()
 
 function playBackgroundMusic() {
-    const playPromise = backgroundMusic.play()
+  const playPromise = backgroundMusic.play()
 
-    if (playPromise) {
-        playPromise.catch(() => {
-            window.addEventListener('keydown', playBackgroundMusic, {once: true})
-            window.addEventListener('click', playBackgroundMusic, {once: true})
-        })
-    }
+  if (playPromise) {
+    playPromise.catch(() => {
+      window.addEventListener('keydown', playBackgroundMusic, { once: true })
+      window.addEventListener('click', playBackgroundMusic, { once: true })
+    })
+  }
 }
 
 playBackgroundMusic()
@@ -71,7 +71,7 @@ function drawMenu() {
   c.textBaseline = "top";
 
   menu.forEach((item, index) => {
-    const textY = Math.floor(height / 2.7) + index * 180;
+    const textY = Math.floor(height / 3) + index * 180;
     const textX = Math.floor(width / 2);
 
     c.lineWidth = 8;
@@ -89,10 +89,10 @@ function handleSelection() {
   if (choice === "Join") {
     window.location.href = "index.html";
   }
-else if (choice === "Exit") {
-  running = false;
-  showExitScreen();
-}
+  else if (choice === "Exit") {
+    running = false;
+    showExitScreen();
+  }
 
 }
 
