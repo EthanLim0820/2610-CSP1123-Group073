@@ -17,6 +17,9 @@ backgroundMusic.loop = true
 backgroundMusic.volume = 0.10
 backgroundMusic.play()
 
+const plantingSound = new Audio('./mini it/music/plant sound.wav')
+plantingSound.volume = 0.35
+
 function playBackgroundMusic() {
     const playPromise = backgroundMusic.play()
 
@@ -339,6 +342,8 @@ function plantSeed() {
     plantedSeeds.push(seed)
     movables.push(seed)
     renderables.splice(renderables.indexOf(player), 0, seed)  // Draw the seed before the player so will not bug
+    plantingSound.currentTime = 0
+    plantingSound.play()
     seed.grow()
 }
 

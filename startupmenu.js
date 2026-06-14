@@ -1,4 +1,4 @@
-const menu = ["Join", "Data", "Exit"];
+const menu = ["Join", "Exit"];
 let selected = 0;
 let running = true;
 
@@ -89,10 +89,6 @@ function handleSelection() {
   if (choice === "Join") {
     window.location.href = "index.html";
   }
-  else if (choice === "Data") {
-
-  }
-
 else if (choice === "Exit") {
   running = false;
   showExitScreen();
