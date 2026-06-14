@@ -90,6 +90,21 @@ for (let i = 0; i < farm.length; i += 70) {     // This makes farm[row][column] 
     farmMap.push(farm.slice(i, 70 + i))
 }
 
+const restaurantMap = []
+for (let i = 0; i < sales.length; i += 70) {
+    restaurantMap.push(sales.slice(i, 70 + i))
+}
+
+const cookingMap = []
+for (let i = 0; i < cooking.length; i += 70) {
+    cookingMap.push(cooking.slice(i, 70 + i))
+}
+
+const shopMap = []
+for (let i = 0; i < shop.length; i += 70) {
+    shopMap.push(shop.slice(i, 70 + i))
+}
+
 class Boundary {
     static width = 48
     static height = 48
@@ -263,6 +278,7 @@ const renderables = [background, ...boundaries, ...plantedSeeds, player, foregro
 
 const horizontalSpeed = 5
 const verticalSpeed = 4.4
+let changingPage = false
 
 function rectangularCollision({ rectangle1, rectangle2 }) {
     return (
@@ -301,6 +317,8 @@ function move({ x, y }) {
             movable.position.x += x
             movable.position.y += y
         })
+
+        checkPageChange()
     }
 }
 
@@ -317,6 +335,23 @@ function getPlayerFarmTile() {
         row,
         column,
         tileKey: `${row}-${column}`
+    }
+}
+
+function checkPageChange() {
+    if (changingPage) return
+
+    const { row, column } = getPlayerFarmTile()
+
+    if (restaurantMap[row] && restaurantMap[row][column] === 3429) {
+        changingPage = true
+        window.location.href = 'customersales.js'
+    } else if (cookingMap[row] && cookingMap[row][column] === 2345) {
+        changingPage = true
+        window.location.href = 'designpage.html'
+    } else if (shopMap[row] && shopMap[row][column] === 1439) {
+        changingPage = true
+        window.location.href = 'shopdesign.html'
     }
 }
 
