@@ -52,6 +52,18 @@ playerRightImage.src = './mini it/image/playerRight.png'
 const seedImage = new Image()
 seedImage.src = './mini it/image/corps/seed.png'
 
+const plantStage1Image = new Image()
+plantStage1Image.src = './mini it/image/corps/plant stage 1.png'
+
+const plantStage2Image = new Image()
+plantStage2Image.src = './mini it/image/corps/plant stage 2.png'
+
+const plantStage3Image = new Image()
+plantStage3Image.src = './mini it/image/corps/plant stage 3.png'
+
+const plantStages = [plantStage1Image, plantStage2Image, plantStage3Image]
+const plantGrowthTime = 2000
+
 
 const collisionsMap = []
 for (let i = 0; i < collisions.length; i += 70) {       // The map data is one long list, so this cuts it into rows of 70 tiles.
@@ -144,6 +156,14 @@ class TileSprite {
             this.width,
             this.height
         )
+    }
+
+    grow() {
+        plantStages.forEach((stageImage, index) => {
+            setTimeout(() => {
+                this.image = stageImage
+            }, plantGrowthTime * (index + 1))
+        })
     }
 }
 
@@ -302,6 +322,7 @@ function plantSeed() {
     plantedSeeds.push(seed)
     movables.push(seed)
     renderables.splice(renderables.indexOf(player), 0, seed)  // Draw the seed before the player so will not bug
+    seed.grow()
 }
 
 function animate() {
