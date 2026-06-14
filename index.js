@@ -62,7 +62,19 @@ const plantStage3Image = new Image()
 plantStage3Image.src = './mini it/image/corps/plant stage 3.png'
 
 const plantStages = [plantStage1Image, plantStage2Image, plantStage3Image]
+const cropImages = [
+    './mini it/image/corps/c.red.png',
+    './mini it/image/corps/c.yellow.png',
+    './mini it/image/corps/c.green.png',
+    './mini it/image/corps/c.orange.png',
+    './mini it/image/corps/c.purple.png'
+].map((src) => {
+    const image = new Image()
+    image.src = src
+    return image
+})
 const plantGrowthTime = 2000
+const cropGrowthTime = 3000
 
 
 const collisionsMap = []
@@ -164,6 +176,11 @@ class TileSprite {
                 this.image = stageImage
             }, plantGrowthTime * (index + 1))
         })
+
+        setTimeout(() => {
+            const randomCropIndex = Math.floor(Math.random() * cropImages.length)
+            this.image = cropImages[randomCropIndex]
+        }, plantGrowthTime * plantStages.length + cropGrowthTime)
     }
 }
 
