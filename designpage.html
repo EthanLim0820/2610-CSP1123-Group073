@@ -125,6 +125,48 @@
                 font-size: 32px;
             }
 
+            .inventory-btn{
+                margin-top: 10px;
+                padding: 10px 20px;
+                font-size: 16px;
+                border: none;
+                border-radius: 10px;
+                background: #ffd166;
+                cursor: pointer;
+            }
+
+            .inventory-btn:hover{
+                background: #ffb703;
+            }
+
+            .popup{
+               display: none;
+                position: fixed;
+                z-index: 999;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.6);
+            }
+
+            .popup-content{
+                background: #fff8dc;
+                width: 600px;
+                max-width: 90%;
+                margin: 80px auto;
+                padding: 20px;
+                border-radius: 15px;
+                border: 4px solid #d4a373;
+            }
+
+            .close-btn{
+                float: right;
+                font-size: 30px;
+                cursor: pointer;
+                font-weight: bold;
+            }
+            
             .music-btn{
                 margin-top: 10px;
                 padding: 10px 20px;
@@ -140,6 +182,19 @@
                 background: #ffb703;
             }
 
+            .popup-content{
+            background: #fff8dc;
+            color: black;
+            width: 700px;
+            max-width: 90%;
+            margin: 80px auto;
+            padding: 20px;
+            border-radius: 15px;
+
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
         </style>
         </head>
 
@@ -154,8 +209,19 @@
             <div class="game-box">
                 <p>Cook the food perfectly!</p>
             </div>
-            <h2 class="inventory-title">Cooked Inventory</h2>
-            <div id="inventoryBox"></div>
+            <button class="inventory-btn" onclick="openInventory()">
+                Open Inventory
+            </button>
+
+            <div id="inventoryPopup" class="popup">
+                <div class="popup-content">
+                    <span class="close-btn" onclick="closeInventory()">&times;</span>
+
+                    <h2>Cooked Inventory</h2>
+
+                    <div id="inventoryBox"></div>
+                </div>
+            </div>
 
             <button onclick="resetCookedGame()">
                 Reset Cooked Inventory
