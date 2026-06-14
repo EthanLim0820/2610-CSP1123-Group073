@@ -89,6 +89,61 @@
             height: 60px;
         }
 
+        .inventory-btn{
+            margin-top: 10px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            background: orange;
+            font-size: 16px;
+        }
+
+        .inventory-btn:hover{
+            background: darkorange;
+        }
+
+        .popup{
+            display: none;
+            position: fixed;
+            z-index: 999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+        }
+
+        .popup-content{
+            background: #fff8dc;
+            color: black;
+            width: 700px;
+            max-width: 90%;
+            margin: 80px auto;
+            padding: 20px;
+            border-radius: 15px;
+        }
+
+        .close-btn{
+            float: right;
+            font-size: 30px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .popup-content{
+            background: #fff8dc;
+            color: black;
+            width: 700px;
+            max-width: 90%;
+            margin: 80px auto;
+            padding: 20px;
+            border-radius: 15px;
+
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
     </style>
 </head>
 <body>
@@ -140,7 +195,7 @@
         </div>
 
          <div class="item-box">
-            <img src="image/seed.png" alt="Seed" class="item-image">
+            <img src="image/seeds.png" alt="Seed" class="item-image">
             <h2>Seed</h2>
             <p>Price: 20</p>
 
@@ -184,9 +239,23 @@
 
     <p id="resultText"></p>
 
-    <h2>Inventory</h2>
+    <button class="inventory-btn" onclick="openInventory()">
+        Open Inventory
+    </button>
 
-    <div id="inventoryBox"></div>
+    <div id="inventoryPopup" class="popup">
+        <div class="popup-content">
+
+            <span class="close-btn" onclick="closeInventory()">
+                &times;
+            </span>
+
+            <h2>Inventory</h2>
+
+            <div id="inventoryBox"></div>
+
+        </div>
+    </div>
 
 <button onclick="resetGame()">
         Reset Game
