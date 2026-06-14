@@ -348,10 +348,10 @@ function checkPageChange() {
         window.location.href = 'customersales.js'
     } else if (cookingMap[row] && cookingMap[row][column] === 2345) {
         changingPage = true
-        window.location.href = 'designpage.html'
+        window.location.href = 'shopdesign.html'
     } else if (shopMap[row] && shopMap[row][column] === 1439) {
         changingPage = true
-        window.location.href = 'shopdesign.html'
+        window.location.href = 'designpage.html'
     }
 }
 
