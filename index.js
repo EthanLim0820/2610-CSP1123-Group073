@@ -345,7 +345,7 @@ function checkPageChange() {
 
     if (restaurantMap[row] && restaurantMap[row][column] === 3429) {
         changingPage = true
-        window.location.href = 'customersales.js'
+        window.location.href = 'customersalesfinal2.0.html'
     } else if (cookingMap[row] && cookingMap[row][column] === 2345) {
         changingPage = true
         window.location.href = 'shopdesign.html'
