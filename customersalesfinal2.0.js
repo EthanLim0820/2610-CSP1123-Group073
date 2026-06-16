@@ -109,7 +109,7 @@ function renderStars(rating) {
 function showRating(rating, tipped) {
   let ratingDiv = document.getElementById("rating");
   let html = "Customer rated: " + renderStars(rating);
-  if (tipped) html += ' <span class="tip">+$30 tip!</span>';
+  if (tipped) html += ' <span class="tip">+$3 tip!</span>';
   ratingDiv.innerHTML = html;
   ratingDiv.className = "rating-show";
 }
