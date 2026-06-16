@@ -211,3 +211,21 @@ function toggleMusic(){
     }
 
 }
+
+function openInventory(){
+    document.getElementById("inventoryPopup").style.display = "block";
+}
+
+function closeInventory(){
+    document.getElementById("inventoryPopup").style.display = "none";
+}
+
+window.addEventListener("click", function(event){
+
+    const popup = document.getElementById("inventoryPopup");
+
+    if(event.target === popup){
+        popup.style.display = "none";
+    }
+
+});

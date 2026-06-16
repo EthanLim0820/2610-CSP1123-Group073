@@ -1,4 +1,4 @@
-const menu = ["Join", "Data", "Exit"];
+const menu = ["Join", "Exit"];
 let selected = 0;
 let running = true;
 
@@ -29,14 +29,14 @@ backgroundMusic.volume = 0.10
 backgroundMusic.play()
 
 function playBackgroundMusic() {
-    const playPromise = backgroundMusic.play()
+  const playPromise = backgroundMusic.play()
 
-    if (playPromise) {
-        playPromise.catch(() => {
-            window.addEventListener('keydown', playBackgroundMusic, {once: true})
-            window.addEventListener('click', playBackgroundMusic, {once: true})
-        })
-    }
+  if (playPromise) {
+    playPromise.catch(() => {
+      window.addEventListener('keydown', playBackgroundMusic, { once: true })
+      window.addEventListener('click', playBackgroundMusic, { once: true })
+    })
+  }
 }
 
 playBackgroundMusic()
@@ -66,15 +66,15 @@ function drawMenu() {
     c.drawImage(backgroundImage, background.x, background.y);
   }
 
-  c.font = "100px sans-serif";
+  c.font = "150px sans-serif";
   c.textAlign = "center";
   c.textBaseline = "top";
 
   menu.forEach((item, index) => {
-    const textY = Math.floor(height / 3.5) + index * 130;
+    const textY = Math.floor(height / 3) + index * 180;
     const textX = Math.floor(width / 2);
 
-    c.lineWidth = 5;
+    c.lineWidth = 8;
     c.strokeStyle = "#6c6c76";
     c.strokeText(item, textX, textY);
     c.fillStyle = index === selected ? "#ff6767" : "#ffffff";
@@ -89,14 +89,10 @@ function handleSelection() {
   if (choice === "Join") {
     window.location.href = "index.html";
   }
-  else if (choice === "Data") {
-
+  else if (choice === "Exit") {
+    running = false;
+    showExitScreen();
   }
-
-else if (choice === "Exit") {
-  running = false;
-  showExitScreen();
-}
 
 }
 
