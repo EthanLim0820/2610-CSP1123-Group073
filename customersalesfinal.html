@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pet Dining</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --brown-dark: #3e2723;
+      --brown-mid:  #6d4c41;
+      --brown-light:#a1887f;
+      --cream:      #fff8e1;
+      --cream-dark: #fffde7;
+      --green-dark: #2e7d32;
+      --green-mid:  #558b2f;
+      --green-btn:  #689f38;
+      --orange:     #e65100;
+      --sky:        #87ceeb;
+      --grass:      #6abf5e;
+      --shadow:     rgba(0,0,0,0.18);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(to bottom, var(--sky) 54%, var(--grass) 54%);
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 28px 16px 48px;
+    }
+
+    .wrapper {
+      width: 100%;
+      max-width: 520px;
+    }
+
+    .panel {
+      background: var(--cream-dark);
+      border: 4px solid var(--brown-mid);
+      border-radius: 18px;
+      padding: 24px 22px 20px;
+      box-shadow: 0 8px 0 var(--brown-dark), 0 12px 28px var(--shadow);
+    }
+
+    h1 {
+      font-family: 'Press Start 2P', monospace;
+      text-align: center;
+      color: var(--brown-dark);
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin: 0 0 18px;
+      letter-spacing: 1px;
+    }
+
+    #money {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--orange);
+      margin-bottom: 12px;
+    }
+
+    #customer-info {
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      transition: max-height 0.4s ease, opacity 0.4s ease;
+      margin-bottom: 0;
+    }
+    #customer-info.visible {
+      max-height: 160px;
+      opacity: 1;
+      margin-bottom: 12px;
+    }
+
+    #dialogue {
+      font-style: italic;
+      color: var(--brown-mid);
+      margin-bottom: 6px;
+      font-size: 0.92rem;
+      background: #efebe9;
+      border-left: 4px solid var(--brown-light);
+      padding: 6px 10px;
+      border-radius: 6px;
+    }
+
+    #order {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--green-dark);
+      background: #f1f8e9;
+      border-left: 4px solid var(--green-mid);
+      padding: 6px 10px;
+      border-radius: 6px;
+    }
+
+    #streak-bar {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .streak-seg {
+      flex: 1;
+      height: 14px;
+      border-radius: 6px;
+      background: #d7ccc8;
+      border: 2px solid var(--brown-light);
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .streak-seg.filled {
+      background: var(--orange);
+      border-color: var(--orange);
+    }
+
+    #strikes { color: #c62828; font-weight: 800; margin-bottom: 6px; min-height: 20px; font-size: 0.9rem; }
+
+    #status {
+      font-weight: 800;
+      margin-bottom: 6px;
+      min-height: 22px;
+      font-size: 0.95rem;
+    }
+    #status.correct { color: var(--green-dark); }
+    #status.wrong   { color: #c62828; }
+
+    #rating {
+      min-height: 24px;
+      margin-bottom: 12px;
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: var(--brown-dark);
+    }
+    #rating.rating-show { animation: popIn 0.3s ease; }
+
+    @keyframes popIn {
+      0%   { transform: scale(0.7); opacity: 0; }
+      70%  { transform: scale(1.1); }
+      100% { transform: scale(1);   opacity: 1; }
+    }
+
+    .stars     { color: #f9a825; font-size: 1.2rem; letter-spacing: 2px; }
+    .stars.zero{ color: #c62828; font-size: 0.9rem; letter-spacing: 0; }
+
+    .tip {
+      color: var(--orange);
+      font-size: 0.95rem;
+      margin-left: 6px;
+      animation: tipPop 0.4s ease;
+      display: inline-block;
+    }
+    @keyframes tipPop {
+      0%   { transform: scale(0.5) rotate(-10deg); opacity: 0; }
+      60%  { transform: scale(1.2) rotate(3deg); }
+      100% { transform: scale(1)   rotate(0deg);  opacity: 1; }
+    }
+
+    #mode-selector {
+      display: none;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    #mode-selector.visible { display: flex; }
+
+    .mode-btn {
+      flex: 1;
+      padding: 10px;
+      border: 3px solid var(--brown-dark);
+      border-radius: 10px;
+      background: var(--cream);
+      color: var(--brown-dark);
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 4px 0 var(--brown-mid);
+      transition: transform 0.1s, box-shadow 0.1s, background 0.15s;
+    }
+    .mode-btn:hover  { background: #ffe082; }
+    .mode-btn:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--brown-mid); }
+    .mode-btn.active { background: var(--brown-dark); color: var(--cream); box-shadow: 0 2px 0 #1a0a00; }
+
+    #delivery-banner {
+      display: none;
+      background: #e3f2fd;
+      border: 2px dashed #64b5f6;
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 0.85rem;
+      color: #1565c0;
+      font-weight: 800;
+      margin-bottom: 12px;
+      align-items: center;
+      gap: 8px;
+    }
+    #delivery-banner.show { display: flex; }
+
+    #product-section { display: none; }
+    #product-section.visible { display: block; }
+
+    #product-label {
+      font-weight: 800;
+      color: var(--brown-dark);
+      margin-bottom: 10px;
+      font-size: 0.95rem;
+    }
+
+    #button {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+    }
+
+    button.prod-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      padding: 0 0 10px;
+      border: 3px solid var(--brown-dark);
+      border-radius: 12px;
+      background: var(--green-btn);
+      color: white;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 5px 0 #33691e;
+      transition: transform 0.1s, box-shadow 0.1s, filter 0.1s;
+      overflow: hidden;
+      text-align: center;
+      line-height: 1.3;
+    }
+    button.prod-btn:hover  { filter: brightness(1.08); }
+    button.prod-btn:active { transform: translateY(4px); box-shadow: 0 1px 0 #33691e; }
+
+    .prod-img-wrap {
+      width: 100%;
+      aspect-ratio: 1;
+      overflow: hidden;
+      background: #1a1a2e;
+      margin-bottom: 6px;
+    }
+
+    .prod-img {
+      width: 100%;
+      height: 100%;
+      background-image: url('feed_sprite.png');
+      background-size: 300% 200%;
+      image-rendering: pixelated;
+    }
+
+    .sprite-0-0 { background-position: 0%   0%; }
+    .sprite-1-0 { background-position: 50%  0%; }
+    .sprite-2-0 { background-position: 100% 0%; }
+    .sprite-0-1 { background-position: 0%   100%; }
+    .sprite-1-1 { background-position: 50%  100%; }
+    .sprite-2-1 { background-position: 100% 100%; }
+
+    .prod-price {
+      font-size: 0.82rem;
+      color: #fff9c4;
+    }
+
+    hr { margin: 16px 0 10px; border: 1px dashed var(--brown-light); }
+
+    .footer-row {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 800;
+      color: var(--brown-mid);
+      font-size: 0.88rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrapper">
+    <div class="panel">
+      <h1>Pet Dining</h1>
+      <div id="money">Money: $0</div>
+
+      <div id="customer-info">
+        <div id="dialogue"></div>
+        <div id="order"></div>
+      </div>
+
+      <div id="streak-bar">
+        <div class="streak-seg" id="seg-1"></div>
+        <div class="streak-seg" id="seg-2"></div>
+        <div class="streak-seg" id="seg-3"></div>
+        <div class="streak-seg" id="seg-4"></div>
+        <div class="streak-seg" id="seg-5"></div>
+      </div>
+
+      <div id="strikes"></div>
+      <div id="status"></div>
+      <div id="rating"></div>
+
+      <div id="mode-selector">
+        <button class="mode-btn" id="btn-counter"  onclick="selectMode('counter')">Counter</button>
+        <button class="mode-btn" id="btn-delivery" onclick="selectMode('delivery')">Delivery</button>
+      </div>
+
+      <div id="delivery-banner">Delivering to customer's door — pick the item:</div>
+
+      <div id="product-section">
+        <p id="product-label">Choose a product:</p>
+        <div id="button"></div>
+      </div>
+
+      <hr>
+      <div class="footer-row">
+        <span id="served">Served: 0</span>
+        <span id="earned">Earned: $0</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="customersalesfinal.js"></script>
+</body>
+</html>
