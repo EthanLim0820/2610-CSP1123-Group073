@@ -85,6 +85,7 @@ function resetStats() {
   CustomerData.totalServed = 0;
   saveStats();
   document.getElementById("money").innerText = "Money: $0";
+  document.getElementById("game-complete").innerText = "";
   updateFooter();
 }
 
@@ -282,6 +283,10 @@ function sell(product) {
     });
     CustomerData.totalServed++;
 
+    if (CustomerData.totalServed === 10) {
+      document.getElementById("game-complete").innerText = "Congrats you have completed the game";
+    }
+
     updateFooter();
     setTimeout(spawnCustomer, 1600);
 
@@ -319,4 +324,7 @@ renderStock();
 loadStats();
 document.getElementById("money").innerText = "Money: $" + money;
 updateFooter();
+if (CustomerData.totalServed >= 10) {
+  document.getElementById("game-complete").innerText = "Congrats you have completed the game";
+}
 spawnCustomer();
