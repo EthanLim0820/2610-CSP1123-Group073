@@ -117,7 +117,7 @@ function renderStock() {
   if (Object.keys(itemCount).length === 0) {
     const li = document.createElement("li");
     li.className = "empty";
-    li.textContent = "No cooked food yet";
+    li.textContent = "No food is cooked yet";
     list.appendChild(li);
     return;
   }
