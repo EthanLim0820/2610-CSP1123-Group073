@@ -20,8 +20,6 @@ let inventory =[]
 inventory = JSON.parse(localStorage.getItem("inventory")) || [];
 
 const shopItems = [
-    { name: "Fish", price: 10 },
-    { name: "Meat", price: 25 },
     { name: "Carrot", price: 20 },
     { name: "Corn", price: 10 },
     { name: "Seed", price: 20 },

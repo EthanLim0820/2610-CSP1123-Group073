@@ -343,15 +343,15 @@ function checkPageChange() {
 
     const { row, column } = getPlayerFarmTile()
 
-    if (restaurantMap[row] && restaurantMap[row][column] === 3429) {
+    if (restaurantMap[row] && restaurantMap[row][column] === 3484) {
         changingPage = true
         window.location.href = 'customersalesfinal2.0.html'
-    } else if (cookingMap[row] && cookingMap[row][column] === 2345) {
-        changingPage = true
-        window.location.href = 'shopdesign.html'
-    } else if (shopMap[row] && shopMap[row][column] === 1439) {
+    } else if (cookingMap[row] && cookingMap[row][column] === 1439 || cookingMap[row][column] === 1462) {
         changingPage = true
         window.location.href = 'designpage.html'
+    } else if (shopMap[row] && shopMap[row][column] === 2393) {
+        changingPage = true
+        window.location.href = 'shopdesign.html'
     }
 }
 

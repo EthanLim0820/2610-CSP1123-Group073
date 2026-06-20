@@ -33,6 +33,19 @@ function addToCookedInventory(foodName){
     showCookedInventory();
 }
 
+function getCookedFoodName(foodName){
+    const foodNames = {
+        Carrot: "Carrot Feast",
+        Seed: "Seed Pack",
+        Lettuce: "Lettuce Bowl",
+        Wheat: "Wheat Feed",
+        Corn: "Corn Cup",
+        Grass: "Grass Feast"
+    };
+
+    return foodNames[foodName] || foodName;
+}
+
 function showCookedInventory(){
 
     const inventoryBox =
@@ -54,7 +67,7 @@ function showCookedInventory(){
     for(let item in itemCount){
 
       let imageName =
-      item.split(" (")[0].toLowerCase();
+      item.split(" (")[0];
         
       inventoryBox.innerHTML += `
         <div class="inventory-item">
@@ -81,7 +94,7 @@ function startCooking(index) {
   box.className = "cookUI";
 
   const foodselect = document.createElement("select");
-  const foods = ["Carrot", "Seeds", "Lettuce", "Fish", "Meat", "Grains"];
+  const foods = ["Carrot", "Seed", "Lettuce", "Wheat", "Corn", "Grass"];
 
   foods.forEach(food => {
     const option  = document.createElement("option");
@@ -166,6 +179,7 @@ function startCooking(index) {
 
     const value = Number(slider.value);
     const selectedFood = foodselect.value;
+    const cookedFoodName = getCookedFoodName(selectedFood);
     const selectWetness = wetnessSelect.value;
     const selectedSize = sizeSelect.value;
 
@@ -181,10 +195,10 @@ function startCooking(index) {
       foodQuality = "Bad Food";
       resultText.style.color = "#E53935";
     }
-    resultText.innerText = "Cook Successful! You made: " + selectedFood + " ("+ foodQuality + ") [" + selectWetness + ", " + selectedSize + "]";
+    resultText.innerText = "Cook Successful! You made: " + cookedFoodName + " ("+ foodQuality + ") [" + selectWetness + ", " + selectedSize + "]";
     
     addToCookedInventory(
-    selectedFood + " (" + foodQuality + ") [" + selectWetness + ", " + selectedSize + "]"
+    cookedFoodName + " (" + foodQuality + ") [" + selectWetness + ", " + selectedSize + "]"
 );
     setTimeout(() => box.remove(), 2000);
   };
