@@ -12,59 +12,129 @@ let CustomerData = {
   totalServed: 0
 };
 
-let pets = ["rabbit", "hamster", "guinea pig", "cat", "dog", "bird", "horse", "duck"];
+let pets = ["rabbit", "hamster", "guinea pig", "bird", "horse", "duck"];
 
 let dialogues = {
-  rabbit:       ["My rabbit only eats dry food!", "Dry and big please, my bunny is hungry!", "Nothing wet for my rabbit!"],
-  hamster:      ["My little hamster needs something small!", "Small portions only, he's tiny!", "Don't give me anything big!"],
-  "guinea pig": ["My guinea pig is starving!", "Big and wet, just how she likes it!", "Make it quick, she's squealing!"],
-  cat:          ["My cat is very picky, dry only!", "Small and dry, she won't eat anything else!", "My fussy cat demands dry food!"],
-  dog:          ["My dog eats everything, bring big wet food!", "He's a big boy, make it large and wet!", "Wet and big, he's been waiting all day!"],
-  bird:         ["My bird needs small wet seeds!", "Small and wet, just right for her beak!", "She only pecks at small wet food!"],
-  horse:        ["My horse only eats big grain feed!", "He's a big fella, needs his dry grain!", "Nothing but big grain for my stallion!"],
-  duck:         ["My duck loves her wet mix!", "Small and wet, just how she waddles for it!", "Quack! She wants the small wet mix!"],
+  rabbit:       ["My rabbit wants a big dry carrot feast!", "Big dry carrot feast, please. My bunny is hungry!", "Nothing wet today, just a big dry carrot feast!"],
+  hamster:      ["My hamster needs a small dry seed pack!", "Small dry seed pack, please. He's tiny!", "Don't give me anything big, just a small dry seed pack!"],
+  "guinea pig": ["My guinea pig wants a big wet lettuce bowl!", "Big wet lettuce bowl, just how she likes it!", "Make it quick, she needs a big wet lettuce bowl!"],
+  bird:         ["My bird needs a small wet corn cup!", "Small wet corn cup, just right for her beak!", "She only pecks at a small wet corn cup!"],
+  horse:        ["My horse wants a big dry wheat feed!", "He's a big fella, give him a big dry wheat feed!", "Nothing but big dry wheat feed for my stallion!"],
+  duck:         ["My duck loves a small wet grass feast!", "Small wet grass feast, just how she waddles for it!", "Quack! She wants a small wet grass feast!"],
 };
 
-let products = [
-  { name: "Big Dry Feed",   size: "big",   wetness: "dry",   price: 120, spriteClass: "sprite-0-0" },
-  { name: "Small Dry Feed", size: "small", wetness: "dry",   price: 100, spriteClass: "sprite-1-0" },
-  { name: "Big Wet Feed",   size: "big",   wetness: "wet",   price: 140, spriteClass: "sprite-2-0" },
-  { name: "Small Wet Feed", size: "small", wetness: "wet",   price: 110, spriteClass: "sprite-0-1" },
-  { name: "Big Grain Feed", size: "big",   wetness: "grain", price: 130, spriteClass: "sprite-1-1" },
-  { name: "Small Mix Feed", size: "small", wetness: "mix",   price: 120, spriteClass: "sprite-2-1" },
-];
+let products = [];
+let cookedInventory = [];
 
-let stock = {};
+const foodPrices = {
+  Carrot: 120,
+  Seeds: 110,
+  Lettuce: 130,
+  Wheat: 110,
+  Corn: 120,
+  Grass: 120,
+};
 
-function loadStock() {
-  const saved = localStorage.getItem("petDiningStock");
-  if (saved) {
-    stock = JSON.parse(saved);
-  } else {
-    products.forEach(p => stock[p.name] = 10);
-  }
+const foodNames = {
+  Carrot: "Carrot Feast",
+  Seeds: "Seed Pack",
+  Lettuce: "Lettuce Bowl",
+  Wheat: "Wheat Feed",
+  Corn: "Corn Cup",
+  Grass: "Grass Feast",
+};
+
+function loadCookedInventory() {
+  cookedInventory = JSON.parse(localStorage.getItem("cookedInventory")) || [];
+  products = getCookedProducts();
 }
 
-function saveStock() {
-  localStorage.setItem("petDiningStock", JSON.stringify(stock));
+function saveCookedInventory() {
+  localStorage.setItem("cookedInventory", JSON.stringify(cookedInventory));
+}
+
+function countCookedItems() {
+  const itemCount = {};
+
+  cookedInventory.forEach(item => {
+    itemCount[item] = (itemCount[item] || 0) + 1;
+  });
+
+  return itemCount;
+}
+
+function parseCookedItem(item) {
+  const match = item.match(/^(.+) \((.+)\) \[(.+), (.+)\]$/);
+
+  if (!match) {
+    return null;
+  }
+
+  const cookedName = match[1];
+  const food = Object.keys(foodNames).find(key => foodNames[key] === cookedName) || cookedName;
+  const quality = match[2];
+  const wetness = match[3].toLowerCase();
+  const size = match[4].toLowerCase();
+
+  return {
+    name: item,
+    cookedName,
+    food,
+    quality,
+    wetness,
+    size,
+    price: foodPrices[food] || 100,
+    image: "image/" + (foodNames[food] || food.toLowerCase()) + ".png",
+  };
+}
+
+function getCookedProducts() {
+  return Object.keys(countCookedItems())
+    .map(parseCookedItem)
+    .filter(Boolean);
+}
+
+function getCookedItemCount(itemName) {
+  return countCookedItems()[itemName] || 0;
+}
+
+function removeCookedItem(itemName) {
+  const index = cookedInventory.indexOf(itemName);
+
+  if (index !== -1) {
+    cookedInventory.splice(index, 1);
+    saveCookedInventory();
+    loadCookedInventory();
+  }
 }
 
 function renderStock() {
   const list = document.getElementById("inv-list");
+  const itemCount = countCookedItems();
+
   list.innerHTML = "";
-  products.forEach(p => {
+
+  if (Object.keys(itemCount).length === 0) {
     const li = document.createElement("li");
-    const qty = stock[p.name] !== undefined ? stock[p.name] : 10;
-    li.textContent = p.name + ": " + qty;
-    li.style.color = qty === 0 ? "#c62828" : "";
+    li.className = "empty";
+    li.textContent = "No cooked food yet";
+    list.appendChild(li);
+    return;
+  }
+
+  Object.keys(itemCount).forEach(item => {
+    const li = document.createElement("li");
+    li.textContent = item + ": " + itemCount[item];
     list.appendChild(li);
   });
 }
 
 function resetStock() {
-  products.forEach(p => stock[p.name] = 10);
-  saveStock();
+  cookedInventory = [];
+  saveCookedInventory();
+  loadCookedInventory();
   renderStock();
+  buildProductButtons();
 }
 
 function loadStats() {
@@ -106,10 +176,32 @@ function renderStars(rating) {
   return '<span class="stars">' + "★".repeat(rating) + "☆".repeat(5 - rating) + "</span>";
 }
 
-function showRating(rating, tipped) {
+function getTip(rating) {
+  if (rating === 5) {
+    return { grade: "Excellent", tip: 10 };
+  }
+
+  if (rating >= 3) {
+    return { grade: "Good", tip: 5 };
+  }
+
+  return { grade: "Bad", tip: 0 };
+}
+
+function showRating(rating, reward) {
   let ratingDiv = document.getElementById("rating");
-  let html = "Customer rated: " + renderStars(rating);
-  if (tipped) html += ' <span class="tip">+$3 tip!</span>';
+  reward = reward || { grade: "Bad", tip: 0 };
+
+  let html =
+    "Customer rated: " +
+    renderStars(rating) +
+    " | Grade: " +
+    reward.grade;
+
+  if (reward.tip > 0) {
+    html += ' <span class="tip">+$' + reward.tip + ' tip!</span>';
+  }
+
   ratingDiv.innerHTML = html;
   ratingDiv.className = "rating-show";
 }
@@ -167,25 +259,24 @@ function spawnCustomer() {
   const pet = pets[Math.floor(Math.random() * pets.length)];
 
   const prefMap = {
-    rabbit:       { size: "big",   wetness: "dry"   },
-    hamster:      { size: "small", wetness: "dry"   },
-    "guinea pig": { size: "big",   wetness: "wet"   },
-    cat:          { size: "small", wetness: "dry"   },
-    dog:          { size: "big",   wetness: "wet"   },
-    bird:         { size: "small", wetness: "wet"   },
-    horse:        { size: "big",   wetness: "grain" },
-    duck:         { size: "small", wetness: "mix"   },
+    rabbit:       { food: "Carrot",  size: "big",   wetness: "dry" },
+    hamster:      { food: "Seeds",   size: "small", wetness: "dry" },
+    "guinea pig": { food: "Lettuce", size: "big",   wetness: "wet" },
+    bird:         { food: "Corn",    size: "small", wetness: "wet" },
+    horse:        { food: "Wheat",   size: "big",   wetness: "dry" },
+    duck:         { food: "Grass",   size: "small", wetness: "wet" },
   };
 
   const pref = prefMap[pet];
-  currentCustomer = { pet, wetness: pref.wetness, size: pref.size };
+  currentCustomer = { pet, food: pref.food, wetness: pref.wetness, size: pref.size };
   CustomerData.current = currentCustomer;
 
   const line = dialogues[pet][Math.floor(Math.random() * dialogues[pet].length)];
 
   setTimeout(function () {
     document.getElementById("dialogue").innerText = '"' + line + '"';
-    document.getElementById("order").innerText = pet + " wants: " + pref.wetness + ", " + pref.size;
+    document.getElementById("order").innerText =
+      pet + " wants: " + foodNames[pref.food] + ", " + pref.wetness + ", " + pref.size;
     document.getElementById("customer-info").classList.add("visible");
 
     setTimeout(function () {
@@ -197,8 +288,19 @@ function spawnCustomer() {
 }
 
 function buildProductButtons() {
+  loadCookedInventory();
+
   const btnDiv = document.getElementById("button");
   btnDiv.innerHTML = "";
+
+  if (products.length === 0) {
+    const empty = document.createElement("p");
+    empty.textContent = "Cook food in inventory first.";
+    empty.style.color = "#c62828";
+    empty.style.fontWeight = "800";
+    btnDiv.appendChild(empty);
+    return;
+  }
 
   for (let i = 0; i < products.length; i++) {
     const p = products[i];
@@ -209,12 +311,19 @@ function buildProductButtons() {
     const imgWrap = document.createElement("div");
     imgWrap.className = "prod-img-wrap";
 
-    const img = document.createElement("div");
-    img.className = "prod-img " + p.spriteClass;
+    const img = document.createElement("img");
+    img.className = "prod-img";
+    img.src = p.image;
+    img.alt = p.food;
+    img.style.objectFit = "contain";
+    img.style.padding = "10px";
     imgWrap.appendChild(img);
 
     const nameSpan = document.createElement("span");
     nameSpan.innerText = p.name;
+
+    const amountSpan = document.createElement("span");
+    amountSpan.innerText = "Amount: " + getCookedItemCount(p.name);
 
     const priceSpan = document.createElement("span");
     priceSpan.className = "prod-price";
@@ -222,6 +331,7 @@ function buildProductButtons() {
 
     btn.appendChild(imgWrap);
     btn.appendChild(nameSpan);
+    btn.appendChild(amountSpan);
     btn.appendChild(priceSpan);
 
     btn.onclick = (function (product) {
@@ -240,7 +350,7 @@ function sell(product) {
     return;
   }
 
-  if (stock[product.name] <= 0) {
+  if (getCookedItemCount(product.name) <= 0) {
     const status = document.getElementById("status");
     status.innerText = "Out of stock!";
     status.className = "wrong";
@@ -249,6 +359,7 @@ function sell(product) {
 
   const status = document.getElementById("status");
   const correct =
+    product.food    === currentCustomer.food &&
     product.wetness === currentCustomer.wetness &&
     product.size    === currentCustomer.size;
 
@@ -259,19 +370,19 @@ function sell(product) {
     updateStreakBar();
 
     const rating = getRating(strikes, false);
-    const tipped = rating === 5;
-    if (tipped) money += 3;
+    const reward = getTip(rating);
+    money += reward.tip;
 
     document.getElementById("money").innerText = "Money: $" + money;
-    showRating(rating, tipped);
+    showRating(rating, reward);
 
     const modeLabel = currentMode === "delivery" ? " (delivered)" : "";
     status.innerText = "Correct! Sold " + product.name + modeLabel;
     status.className = "correct";
 
-    if (stock[product.name] > 0) stock[product.name]--;
-    saveStock();
+    removeCookedItem(product.name);
     renderStock();
+    buildProductButtons();
 
     CustomerData.history.push({
       pet:    currentCustomer.pet,
@@ -314,7 +425,7 @@ function updateFooter() {
   saveStats();
 }
 
-loadStock();
+loadCookedInventory();
 renderStock();
 loadStats();
 document.getElementById("money").innerText = "Money: $" + money;
