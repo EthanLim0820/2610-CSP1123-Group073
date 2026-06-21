@@ -141,17 +141,19 @@ function loadStats() {
   const saved = localStorage.getItem("petDiningStats");
   if (saved) {
     const s = JSON.parse(saved);
-    money = s.money || 0;
     CustomerData.totalServed = s.totalServed || 0;
   }
+
+  money = MoneyStore.getMoney();
 }
 
 function saveStats() {
-  localStorage.setItem("petDiningStats", JSON.stringify({ money, totalServed: CustomerData.totalServed }));
+  localStorage.setItem("petDiningStats", JSON.stringify({ totalServed: CustomerData.totalServed }));
 }
 
 function resetStats() {
   money = 0;
+  MoneyStore.saveMoney(money);
   CustomerData.totalServed = 0;
   saveStats();
   document.getElementById("money").innerText = "Money: $0";
@@ -365,14 +367,14 @@ function sell(product) {
     product.size    === currentCustomer.size;
 
   if (correct) {
-    money += product.price;
+    money = MoneyStore.addMoney(product.price);
 
     if (streak < 5) streak++;
     updateStreakBar();
 
     const rating = getRating(strikes, false);
     const reward = getTip(rating);
-    money += reward.tip;
+    money = MoneyStore.addMoney(reward.tip);
 
     document.getElementById("money").innerText = "Money: $" + money;
     showRating(rating, reward);

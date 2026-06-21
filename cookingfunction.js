@@ -95,11 +95,20 @@ function startCooking(index) {
 
   const foodselect = document.createElement("select");
   const foods = ["Carrot", "Seed", "Lettuce", "Wheat", "Corn", "Grass"];
+  const rawItemCount = InventoryStore.countItems();
+  const availableFoods = foods.filter(food => rawItemCount[food] > 0);
 
-  foods.forEach(food => {
+  if (availableFoods.length === 0) {
+    box.innerText = "No ingredients in inventory.";
+    document.querySelector(".game-box").appendChild(box);
+    setTimeout(() => box.remove(), 2000);
+    return;
+  }
+
+  availableFoods.forEach(food => {
     const option  = document.createElement("option");
     option.value = food;
-    option.innerText = food;
+    option.innerText = food + " (" + rawItemCount[food] + ")";
     foodselect.appendChild(option);
   });
 
@@ -179,6 +188,13 @@ function startCooking(index) {
 
     const value = Number(slider.value);
     const selectedFood = foodselect.value;
+
+    if (!InventoryStore.removeItem(selectedFood)) {
+      resultText.innerText = selectedFood + " is not in your inventory.";
+      resultText.style.color = "#E53935";
+      return;
+    }
+
     const cookedFoodName = getCookedFoodName(selectedFood);
     const selectWetness = wetnessSelect.value;
     const selectedSize = sizeSelect.value;

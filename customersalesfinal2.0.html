@@ -294,7 +294,7 @@
       color: #fff9c4;
     }
 
-    #reset-stats-btn {
+    .footer-btn {
       padding: 3px 10px;
       background: #c62828;
       color: white;
@@ -358,7 +358,8 @@
       <div class="footer-row">
         <span id="served">Served: 0</span>
         <span id="earned">Earned: $0</span>
-        <button id="reset-stats-btn" onclick="resetStats()">Reset</button>
+        <button class="footer-btn" onclick="resetStats()">Reset</button>
+        <button class="footer-btn" onclick="window.location.href='index.html'">Back</button>
       </div>
     </div>
   </div>
@@ -369,6 +370,7 @@
     <ul id="inv-list"></ul>
   </div>
 
+  <script src="sharedInventory.js"></script>
   <script src="customersalesfinal2.0.js"></script>
 </body>
 </html>
