@@ -19,7 +19,7 @@ MoneyStore.getMoney();
 const shopItems = [
     { name: "Carrot", price: 20 },
     { name: "Corn", price: 10 },
-    { name: "Seed", price: 20 },
+    { name: "Seed", price: 5 },
     { name: "Lettuce", price: 15 }, 
     { name: "Wheat", price: 10 }, 
     { name: "Grass", price: 10 }
