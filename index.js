@@ -280,6 +280,8 @@ const renderables = [background, ...boundaries, ...plantedSeeds, player, foregro
 const horizontalSpeed = 5
 const verticalSpeed = 4.4
 let changingPage = false
+// Key name used to save the farm position before going to another page.
+const farmReturnPositionKey = 'farmReturnPosition'
 
 function rectangularCollision({ rectangle1, rectangle2 }) {
     return (
@@ -292,6 +294,11 @@ function rectangularCollision({ rectangle1, rectangle2 }) {
 
 function move({ x, y }) {
     let moving = true
+    // Save the map position before moving, so we can return here later.
+    const previousPosition = {
+        x: background.position.x,
+        y: background.position.y
+    }
 
     for (let i = 0; i < boundaries.length; i++) {
         const boundary = boundaries[i]
@@ -319,7 +326,8 @@ function move({ x, y }) {
             movable.position.y += y
         })
 
-        checkPageChange()
+        // Check if the player stepped on a page-changing tile.
+        checkPageChange(previousPosition)
     }
 }
 
@@ -339,20 +347,59 @@ function getPlayerFarmTile() {
     }
 }
 
-function checkPageChange() {
+function saveFarmReturnPosition(position) {
+    // sessionStorage keeps this value when moving between pages in the same tab.
+    sessionStorage.setItem(farmReturnPositionKey, JSON.stringify(position))
+}
+
+function restoreFarmReturnPosition() {
+    // If the player did not come back from another page, there is nothing to restore.
+    const savedPosition = sessionStorage.getItem(farmReturnPositionKey)
+    if (!savedPosition) return
+
+    // Remove it after using it so a normal page refresh starts from the default place.
+    sessionStorage.removeItem(farmReturnPositionKey)
+
+    try {
+        const position = JSON.parse(savedPosition)
+
+        // Only restore if the saved data is valid.
+        if (typeof position.x !== 'number' || typeof position.y !== 'number') return
+
+        // Move the whole map back to the saved position.
+        const xChange = position.x - background.position.x
+        const yChange = position.y - background.position.y
+
+        movables.forEach((movable) => {
+            movable.position.x += xChange
+            movable.position.y += yChange
+        })
+    } catch (error) {
+        console.warn('Could not restore farm position:', error)
+    }
+}
+
+function goToPage(page, returnPosition) {
+    // Save the farm position first, then open the selected page.
+    changingPage = true
+    saveFarmReturnPosition(returnPosition)
+    window.location.href = page
+}
+
+function checkPageChange(returnPosition = background.position) {
     if (changingPage) return
 
     const { row, column } = getPlayerFarmTile()
 
+    // Restaurant entrance.
     if (restaurantMap[row] && restaurantMap[row][column] === 3484) {
-        changingPage = true
-        window.location.href = 'customersalesfinal2.0.html'
-    } else if (cookingMap[row] && cookingMap[row][column] === 1439 || cookingMap[row][column] === 1462) {
-        changingPage = true
-        window.location.href = 'designpage.html'
+        goToPage('customersalesfinal2.0.html', returnPosition)
+    // Cooking entrance.
+    } else if (cookingMap[row] && (cookingMap[row][column] === 1439 || cookingMap[row][column] === 1462)) {
+        goToPage('designpage.html', returnPosition)
+    // Shop entrance.
     } else if (shopMap[row] && shopMap[row][column] === 2393) {
-        changingPage = true
-        window.location.href = 'shopdesign.html'
+        goToPage('shopdesign.html', returnPosition)
     }
 }
 
@@ -441,6 +488,8 @@ function animate() {
 }
 
 let lastKey = ''
+// Restore the saved map position before the first frame draws.
+restoreFarmReturnPosition()
 animate()
 
 
