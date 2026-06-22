@@ -15,21 +15,8 @@ document.addEventListener("click", () => {
 
 }, { once: true });
 
-let cookedInventory =
-JSON.parse(localStorage.getItem("cookedInventory")) || [];
-
-function saveCookedInventory(){
-    localStorage.setItem(
-        "cookedInventory",
-        JSON.stringify(cookedInventory)
-    );
-}
-
 function addToCookedInventory(foodName){
-    cookedInventory.push(foodName);
-
-    saveCookedInventory();
-
+    CookedInventoryStore.addItem(foodName);
     showCookedInventory();
 }
 
@@ -53,16 +40,7 @@ function showCookedInventory(){
 
     inventoryBox.innerHTML = "";
 
-    let itemCount = {};
-
-    for(let item of cookedInventory){
-
-        if(itemCount[item]){
-            itemCount[item]++;
-        } else {
-            itemCount[item] = 1;
-        }
-    }
+    let itemCount = CookedInventoryStore.countItems();
 
     for(let item in itemCount){
 
@@ -225,7 +203,7 @@ function startCooking(index) {
 
     function resetCookedGame(){
 
-    localStorage.removeItem("cookedInventory");
+    CookedInventoryStore.clear();
 
     allowGamePageChange();
     location.reload();

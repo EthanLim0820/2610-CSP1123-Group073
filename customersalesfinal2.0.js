@@ -24,7 +24,6 @@ let dialogues = {
 };
 
 let products = [];
-let cookedInventory = [];
 
 const foodPrices = {
   Carrot: 120,
@@ -45,22 +44,11 @@ const foodNames = {
 };
 
 function loadCookedInventory() {
-  cookedInventory = JSON.parse(localStorage.getItem("cookedInventory")) || [];
   products = getCookedProducts();
 }
 
-function saveCookedInventory() {
-  localStorage.setItem("cookedInventory", JSON.stringify(cookedInventory));
-}
-
 function countCookedItems() {
-  const itemCount = {};
-
-  cookedInventory.forEach(item => {
-    itemCount[item] = (itemCount[item] || 0) + 1;
-  });
-
-  return itemCount;
+  return CookedInventoryStore.countItems();
 }
 
 function parseCookedItem(item) {
@@ -99,11 +87,7 @@ function getCookedItemCount(itemName) {
 }
 
 function removeCookedItem(itemName) {
-  const index = cookedInventory.indexOf(itemName);
-
-  if (index !== -1) {
-    cookedInventory.splice(index, 1);
-    saveCookedInventory();
+  if (CookedInventoryStore.removeItem(itemName)) {
     loadCookedInventory();
   }
 }
@@ -130,8 +114,7 @@ function renderStock() {
 }
 
 function resetStock() {
-  cookedInventory = [];
-  saveCookedInventory();
+  CookedInventoryStore.clear();
   loadCookedInventory();
   renderStock();
   buildProductButtons();
