@@ -227,6 +227,7 @@ function startCooking(index) {
 
     localStorage.removeItem("cookedInventory");
 
+    allowGamePageChange();
     location.reload();
 
 } 

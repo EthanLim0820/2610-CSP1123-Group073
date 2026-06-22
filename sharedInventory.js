@@ -81,3 +81,22 @@ const MoneyStore = {
         localStorage.removeItem(this.key);
     }
 };
+
+const refreshWarningMessage = "You will lose every data once you refresh.";
+let gamePageChangeAllowed = false;
+
+function allowGamePageChange() {
+    gamePageChangeAllowed = true;
+}
+
+function goToGamePage(page) {
+    allowGamePageChange();
+    window.location.href = page;
+}
+
+window.addEventListener("beforeunload", (event) => {
+    if (gamePageChangeAllowed) return;
+
+    event.preventDefault();
+    event.returnValue = refreshWarningMessage;
+});

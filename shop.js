@@ -99,6 +99,7 @@ function resetGame(){
 
     localStorage.clear();
 
+    allowGamePageChange();
     location.reload();
 }
 

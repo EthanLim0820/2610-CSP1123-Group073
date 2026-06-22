@@ -383,7 +383,7 @@ function goToPage(page, returnPosition) {
     // Save the farm position first, then open the selected page.
     changingPage = true
     saveFarmReturnPosition(returnPosition)
-    window.location.href = page
+    goToGamePage(page)
 }
 
 function checkPageChange(returnPosition = background.position) {
