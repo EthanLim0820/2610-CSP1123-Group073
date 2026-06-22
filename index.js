@@ -76,6 +76,7 @@ const cropImages = [
     image.src = src
     return image
 })
+const cropNames = ['Carrot', 'Corn', 'Lettuce', 'Wheat', 'Grass']
 const plantGrowthTime = 2000
 const cropGrowthTime = 3000
 
@@ -364,6 +365,11 @@ function plantSeed() {
     // Stop the same tile from getting more than one seed.
     if (plantedSeeds.some((seed) => seed.tileKey === tileKey)) return
 
+    if (!InventoryStore.removeItem('Seed')) {
+        alert('You need to buy a Seed first!')
+        return
+    }
+
     // Place the seed at top-left corner of that farm tile.
     const seed = new TileSprite({
         position: {
@@ -397,6 +403,7 @@ function harvestPlant() {
     if (!plant) return
     if (!cropImages.includes(plant.image)) return
 
+    InventoryStore.addItem(cropNames[cropImages.indexOf(plant.image)])
     removeItem(plantedSeeds, plant)
     removeItem(movables, plant)
     removeItem(renderables, plant)

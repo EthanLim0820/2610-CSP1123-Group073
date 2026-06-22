@@ -14,17 +14,12 @@ document.addEventListener("click", () => {
 }, { once: true });
 
 let money =
-Number(localStorage.getItem("money")) || 100;
-
-let inventory =[] 
-inventory = JSON.parse(localStorage.getItem("inventory")) || [];
+MoneyStore.getMoney();
 
 const shopItems = [
-    { name: "Fish", price: 10 },
-    { name: "Meat", price: 25 },
     { name: "Carrot", price: 20 },
     { name: "Corn", price: 10 },
-    { name: "Seed", price: 20 },
+    { name: "Seed", price: 5 },
     { name: "Lettuce", price: 15 }, 
     { name: "Wheat", price: 10 }, 
     { name: "Grass", price: 10 }
@@ -38,28 +33,15 @@ function buyItem(itemName) {
 
     const item = shopItems.find(i => i.name === itemName);
 
-    if (money >= item.price) {
+    if (MoneyStore.spendMoney(item.price)) {
 
         buySound.currentTime = 0;
         buySound.play();
 
-        money -= item.price;
-        inventory.push(item.name);
-
-        localStorage.setItem( "inventory", JSON.stringify(inventory) );
-        localStorage.setItem( "money", money );
+        money = MoneyStore.getMoney();
+        InventoryStore.addItem(item.name);
 
         showInventory();
-
-        localStorage.setItem(
-            "inventory",
-            JSON.stringify(inventory)
-    );
-
-    localStorage.setItem(
-        "money", 
-        money
-    );
 
         showInventory();
 
@@ -82,16 +64,7 @@ function showInventory(){
 
     inventoryBox.innerHTML = "";
 
-    let itemCount = {};
-
-    for(let item of inventory){
-        if(itemCount[item]){ 
-            itemCount[item]++;
-
-            } else {
-                 itemCount[item] =1;
-    }
-}
+    let itemCount = InventoryStore.countItems();
 
 for(let item in itemCount){
 
