@@ -14,6 +14,9 @@ document.body.appendChild(canvas);
 const backgroundImage = new Image();
 backgroundImage.src = "./mini it/image/gardening map.png";
 
+const instructionImage = new Image();
+instructionImage.src = "./mini it/image/Instruction.png";
+
 const background = {
   x: -400,
   y: -515,
@@ -25,6 +28,7 @@ const background = {
 const backgroundMusic = new Audio('./mini it/music/startupmusic.mp3')
 backgroundMusic.loop = true
 backgroundMusic.volume = 0.10
+let showingInstructions = false
 
 backgroundMusic.play()
 
@@ -82,12 +86,43 @@ function drawMenu() {
   });
 }
 
+function drawInstructions() {
+  const width = canvas.width;
+  const height = canvas.height;
+
+  c.fillStyle = "black";
+  c.fillRect(0, 0, width, height);
+
+  if (backgroundImage.complete && backgroundImage.width !== 0) {
+    moveBackground();
+    c.drawImage(backgroundImage, background.x, background.y);
+  }
+
+  c.fillStyle = "rgba(0, 0, 0, 0.45)";
+  c.fillRect(0, 0, width, height);
+
+  if (instructionImage.complete && instructionImage.width !== 0) {
+    const maxWidth = width * 0.85;
+    const maxHeight = height * 0.85;
+    const scale = Math.min(
+      maxWidth / instructionImage.width,
+      maxHeight / instructionImage.height
+    );
+    const imageWidth = instructionImage.width * scale;
+    const imageHeight = instructionImage.height * scale;
+    const imageX = (width - imageWidth) / 2;
+    const imageY = (height - imageHeight) / 2;
+
+    c.drawImage(instructionImage, imageX, imageY, imageWidth, imageHeight);
+  }
+}
+
 function handleSelection() {
   const choice = menu[selected];
   console.log(choice);
 
   if (choice === "Join") {
-    window.location.href = "index.html";
+    showingInstructions = true;
   }
   else if (choice === "Exit") {
     running = false;
@@ -118,6 +153,13 @@ function handleKeyDown(event) {
     return;
   }
 
+  if (showingInstructions) {
+    if (event.key === "Enter" || event.key === " ") {
+      window.location.href = "index.html";
+    }
+    return;
+  }
+
   if (event.key === "w" || event.key === "ArrowUp") {
     selected = (selected - 1 + menu.length) % menu.length;
   } else if (event.key === "s" || event.key === "ArrowDown") {
@@ -132,7 +174,11 @@ function gameLoop() {
     return;
   }
 
-  drawMenu();
+  if (showingInstructions) {
+    drawInstructions();
+  } else {
+    drawMenu();
+  }
 
   requestAnimationFrame(gameLoop);
 }
