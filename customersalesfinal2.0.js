@@ -420,8 +420,13 @@ renderStock();
 loadStats();
 document.getElementById("money").innerText = "Money: $" + money;
 updateFooter();
-if (CustomerData.totalServed >= 10) {
+if (CustomerData.totalServed >= 3) {
   document.getElementById("game-complete").innerText = "Congrats you have completed the game";
 }
 spawnCustomer();
 spawnCustomer();
+
+document.body.style.backgroundImage = "url('image/restaurant.png')";
+document.body.style.backgroundSize = "cover";
+document.body.style.backgroundPosition = "center";
+document.body.style.backgroundRepeat = "no-repeat";
