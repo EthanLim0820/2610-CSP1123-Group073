@@ -3,13 +3,17 @@ let currentCustomer = null;
 let strikes = 0;
 let currentMode = null;
 const MAX_STRIKES = 3;
+const QUALITY_GOAL = 3;
 
 let streak = 0;
+let resultPopupTimer = null;
 
 let CustomerData = {
   current: null,
   history: [],
-  totalServed: 0
+  totalServed: 0,
+  excellentServed: 0,
+  badServed: 0
 };
 
 let pets = ["rabbit", "hamster", "guinea pig", "bird", "horse", "duck"];
@@ -125,23 +129,56 @@ function loadStats() {
   if (saved) {
     const s = JSON.parse(saved);
     CustomerData.totalServed = s.totalServed || 0;
+    CustomerData.excellentServed = s.excellentServed || 0;
+    CustomerData.badServed = s.badServed || 0;
   }
 
   money = MoneyStore.getMoney();
 }
 
 function saveStats() {
-  localStorage.setItem("petDiningStats", JSON.stringify({ totalServed: CustomerData.totalServed }));
+  localStorage.setItem("petDiningStats", JSON.stringify({
+    totalServed: CustomerData.totalServed,
+    excellentServed: CustomerData.excellentServed,
+    badServed: CustomerData.badServed
+  }));
 }
 
 function resetStats() {
   money = 0;
   MoneyStore.saveMoney(money);
   CustomerData.totalServed = 0;
+  CustomerData.excellentServed = 0;
+  CustomerData.badServed = 0;
   saveStats();
   document.getElementById("money").innerText = "Money: $0";
-  document.getElementById("game-complete").innerText = "";
+  hideGameResultPopup();
   updateFooter();
+}
+
+function showGameResultPopup(message) {
+  document.getElementById("game-result-text").innerText = message;
+  document.getElementById("game-complete").classList.add("show");
+
+  clearTimeout(resultPopupTimer);
+  resultPopupTimer = setTimeout(hideGameResultPopup, 1600);
+}
+
+function hideGameResultPopup() {
+  clearTimeout(resultPopupTimer);
+  document.getElementById("game-result-text").innerText = "";
+  document.getElementById("game-complete").classList.remove("show");
+}
+
+function showGameResultIfNeeded() {
+  if (CustomerData.badServed === QUALITY_GOAL) {
+    showGameResultPopup("You lose");
+    return;
+  }
+
+  if (CustomerData.excellentServed === QUALITY_GOAL) {
+    showGameResultPopup("You won");
+  }
 }
 
 
@@ -379,11 +416,14 @@ function sell(product) {
     });
     CustomerData.totalServed++;
 
-    if (CustomerData.totalServed === 10) {
-      document.getElementById("game-complete").innerText = "Congrats you have completed the game";
+    if (product.quality === "Excellent Food") {
+      CustomerData.excellentServed++;
+    } else if (product.quality === "Bad Food") {
+      CustomerData.badServed++;
     }
 
     updateFooter();
+    showGameResultIfNeeded();
     setTimeout(spawnCustomer, 1600);
 
   } else {
@@ -420,10 +460,7 @@ renderStock();
 loadStats();
 document.getElementById("money").innerText = "Money: $" + money;
 updateFooter();
-if (CustomerData.totalServed >= 3) {
-  document.getElementById("game-complete").innerText = "Congrats you have completed the game";
-}
-spawnCustomer();
+hideGameResultPopup();
 spawnCustomer();
 
 document.body.style.backgroundImage = "url('image/restaurant.png')";

@@ -396,10 +396,10 @@ function checkPageChange(returnPosition = background.position) {
         goToPage('customersalesfinal2.0.html', returnPosition)
     // Cooking entrance.
     } else if (cookingMap[row] && (cookingMap[row][column] === 1439 || cookingMap[row][column] === 1462)) {
-        goToPage('designpage.html', returnPosition)
+        goToPage('cooking.html', returnPosition)
     // Shop entrance.
     } else if (shopMap[row] && shopMap[row][column] === 2393) {
-        goToPage('shopdesign.html', returnPosition)
+        goToPage('shop.html', returnPosition)
     }
 }
 
