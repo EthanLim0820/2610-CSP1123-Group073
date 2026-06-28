@@ -294,13 +294,13 @@ const placeAreas = [
         name: 'Kitchen',
         map: cookingMap,
         symbols: [1439, 1462],
-        page: 'designpage.html'
+        page: 'cooking.html'
     },
     {
         name: 'Shop',
         map: shopMap,
         symbols: [2393],
-        page: 'shopdesign.html'
+        page: 'shop.html'
     }
 ]
 
