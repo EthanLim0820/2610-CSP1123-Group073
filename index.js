@@ -282,6 +282,27 @@ const verticalSpeed = 4.4
 let changingPage = false
 // Key name used to save the farm position before going to another page.
 const farmReturnPositionKey = 'farmReturnPosition'
+const placeDetectionDistance = 2
+const placeAreas = [
+    {
+        name: 'Restaurant',
+        map: restaurantMap,
+        symbols: [3484],
+        page: 'customersalesfinal2.0.html'
+    },
+    {
+        name: 'Kitchen',
+        map: cookingMap,
+        symbols: [1439, 1462],
+        page: 'designpage.html'
+    },
+    {
+        name: 'Shop',
+        map: shopMap,
+        symbols: [2393],
+        page: 'shopdesign.html'
+    }
+]
 
 function rectangularCollision({ rectangle1, rectangle2 }) {
     return (
@@ -347,6 +368,47 @@ function getPlayerFarmTile() {
     }
 }
 
+function getNearbyPlaceName() {
+    const { row, column } = getPlayerFarmTile()
+
+    for (const place of placeAreas) {
+        for (let checkRow = row - placeDetectionDistance; checkRow <= row + placeDetectionDistance; checkRow++) {
+            for (let checkColumn = column - placeDetectionDistance; checkColumn <= column + placeDetectionDistance; checkColumn++) {
+                if (place.map[checkRow] && place.symbols.includes(place.map[checkRow][checkColumn])) {
+                    return place.name
+                }
+            }
+        }
+    }
+
+    return ''
+}
+
+function drawPlaceName() {
+    const placeName = getNearbyPlaceName()
+    if (!placeName) return
+
+    const textX = player.position.x + player.width / 2
+    const textY = player.position.y - 14
+    const paddingX = 14
+
+    c.font = '20px Arial'
+    c.textAlign = 'center'
+    c.textBaseline = 'middle'
+
+    const textWidth = c.measureText(placeName).width
+    const boxWidth = textWidth + paddingX * 2
+    const boxHeight = 34
+    const boxX = textX - boxWidth / 2
+    const boxY = textY - boxHeight / 2
+
+    c.fillStyle = 'rgba(0, 0, 0, 0.7)'
+    c.fillRect(boxX, boxY, boxWidth, boxHeight)
+
+    c.fillStyle = 'white'
+    c.fillText(placeName, textX, textY)
+}
+
 function saveFarmReturnPosition(position) {
     // sessionStorage keeps this value when moving between pages in the same tab.
     sessionStorage.setItem(farmReturnPositionKey, JSON.stringify(position))
@@ -391,15 +453,11 @@ function checkPageChange(returnPosition = background.position) {
 
     const { row, column } = getPlayerFarmTile()
 
-    // Restaurant entrance.
-    if (restaurantMap[row] && restaurantMap[row][column] === 3484) {
-        goToPage('customersalesfinal2.0.html', returnPosition)
-    // Cooking entrance.
-    } else if (cookingMap[row] && (cookingMap[row][column] === 1439 || cookingMap[row][column] === 1462)) {
-        goToPage('designpage.html', returnPosition)
-    // Shop entrance.
-    } else if (shopMap[row] && shopMap[row][column] === 2393) {
-        goToPage('shopdesign.html', returnPosition)
+    for (const place of placeAreas) {
+        if (place.map[row] && place.symbols.includes(place.map[row][column])) {
+            goToPage(place.page, returnPosition)
+            return
+        }
     }
 }
 
@@ -465,6 +523,8 @@ function animate() {
     renderables.forEach((renderable) => {
         renderable.draw()
     })
+
+    drawPlaceName()
 
     player.animate = false
 
