@@ -419,11 +419,9 @@ function saveFarmReturnPosition(position) {
 }
 
 function restoreFarmReturnPosition() {
-    // If the player did not come back from another page, there is nothing to restore.
     const savedPosition = sessionStorage.getItem(AuthStore.scopedSessionKey(farmReturnPositionKey))
     if (!savedPosition) return
 
-    // Remove it after using it so a normal page refresh starts from the default place.
     sessionStorage.removeItem(AuthStore.scopedSessionKey(farmReturnPositionKey))
 
     try {
