@@ -1,4 +1,4 @@
-const menu = ["Join", "Exit"];
+let menu = [];
 let selected = 0;
 let running = true;
 
@@ -29,8 +29,134 @@ const backgroundMusic = new Audio('./mini it/music/startupmusic.mp3')
 backgroundMusic.loop = true
 backgroundMusic.volume = 0.10
 let showingInstructions = false
+let showingLogin = false
 
 backgroundMusic.play()
+
+const accountPanel = document.createElement("div");
+accountPanel.style.position = "fixed";
+accountPanel.style.left = "50%";
+accountPanel.style.top = "50%";
+accountPanel.style.transform = "translate(-50%, -50%)";
+accountPanel.style.width = "min(420px, 90vw)";
+accountPanel.style.padding = "28px";
+accountPanel.style.background = "rgba(18, 18, 24, 0.94)";
+accountPanel.style.border = "4px solid #ffffff";
+accountPanel.style.boxShadow = "0 16px 40px rgba(0, 0, 0, 0.55)";
+accountPanel.style.color = "#ffffff";
+accountPanel.style.fontFamily = "sans-serif";
+accountPanel.style.display = "none";
+accountPanel.style.zIndex = "5";
+
+const accountTitle = document.createElement("h1");
+accountTitle.textContent = "Account";
+accountTitle.style.margin = "0 0 18px";
+accountTitle.style.fontSize = "42px";
+
+const usernameInput = document.createElement("input");
+usernameInput.placeholder = "Username";
+usernameInput.autocomplete = "username";
+
+const passwordInput = document.createElement("input");
+passwordInput.placeholder = "Password";
+passwordInput.type = "password";
+passwordInput.autocomplete = "current-password";
+
+const accountMessage = document.createElement("p");
+accountMessage.style.minHeight = "24px";
+accountMessage.style.fontWeight = "700";
+
+const loginButton = document.createElement("button");
+loginButton.textContent = "Log In";
+
+const createButton = document.createElement("button");
+createButton.textContent = "Create Account";
+
+const closeButton = document.createElement("button");
+closeButton.textContent = "Back";
+
+[usernameInput, passwordInput].forEach((input) => {
+  input.style.width = "100%";
+  input.style.boxSizing = "border-box";
+  input.style.marginBottom = "12px";
+  input.style.padding = "12px";
+  input.style.fontSize = "20px";
+});
+
+[loginButton, createButton, closeButton].forEach((button) => {
+  button.style.marginRight = "8px";
+  button.style.marginTop = "8px";
+  button.style.padding = "10px 14px";
+  button.style.fontSize = "18px";
+  button.style.fontWeight = "800";
+  button.style.cursor = "pointer";
+});
+
+accountPanel.append(
+  accountTitle,
+  usernameInput,
+  passwordInput,
+  accountMessage,
+  loginButton,
+  createButton,
+  closeButton
+);
+document.body.appendChild(accountPanel);
+
+function updateMenu() {
+  menu = AuthStore.isLoggedIn() ? ["Join", "Logout", "Exit"] : ["Log In", "Exit"];
+
+  if (selected >= menu.length) {
+    selected = 0;
+  }
+}
+
+function showAccountPanel(message) {
+  showingLogin = true;
+  accountPanel.style.display = "block";
+  accountMessage.textContent = message || "";
+  accountMessage.style.color = "#ffffff";
+  usernameInput.focus();
+}
+
+function hideAccountPanel() {
+  showingLogin = false;
+  accountPanel.style.display = "none";
+  accountMessage.textContent = "";
+}
+
+function setAccountMessage(message, isError) {
+  accountMessage.textContent = message;
+  accountMessage.style.color = isError ? "#ff6767" : "#79f28f";
+}
+
+function handleAccountResult(result) {
+  setAccountMessage(result.message, !result.ok);
+
+  if (!result.ok) return;
+
+  passwordInput.value = "";
+  hideAccountPanel();
+  updateMenu();
+}
+
+loginButton.onclick = () => {
+  handleAccountResult(AuthStore.login(usernameInput.value, passwordInput.value));
+};
+
+createButton.onclick = () => {
+  handleAccountResult(AuthStore.createAccount(usernameInput.value, passwordInput.value));
+};
+
+closeButton.onclick = hideAccountPanel;
+
+accountPanel.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    loginButton.click();
+  } else if (event.key === "Escape") {
+    hideAccountPanel();
+  }
+});
 
 function playBackgroundMusic() {
   const playPromise = backgroundMusic.play()
@@ -84,6 +210,13 @@ function drawMenu() {
     c.fillStyle = index === selected ? "#ff6767" : "#ffffff";
     c.fillText(item, textX, textY);
   });
+
+  if (AuthStore.isLoggedIn()) {
+    c.font = "32px sans-serif";
+    c.textBaseline = "bottom";
+    c.fillStyle = "#ffffff";
+    c.fillText("Player: " + AuthStore.getActiveAccount(), Math.floor(width / 2), height - 28);
+  }
 }
 
 function drawInstructions() {
@@ -124,6 +257,15 @@ function handleSelection() {
   if (choice === "Join") {
     showingInstructions = true;
   }
+  else if (choice === "Log In") {
+    showAccountPanel();
+  }
+  else if (choice === "Logout") {
+    AuthStore.logout();
+    showingInstructions = false;
+    selected = 0;
+    updateMenu();
+  }
   else if (choice === "Exit") {
     running = false;
     showExitScreen();
@@ -153,8 +295,13 @@ function handleKeyDown(event) {
     return;
   }
 
+  if (showingLogin) {
+    return;
+  }
+
   if (showingInstructions) {
     if (event.key === "Enter" || event.key === " ") {
+      allowGamePageChange();
       window.location.href = "index.html";
     }
     return;
@@ -186,5 +333,6 @@ function gameLoop() {
 window.addEventListener("resize", resizeCanvas);
 window.addEventListener("keydown", handleKeyDown);
 
+updateMenu();
 resizeCanvas();
 gameLoop();

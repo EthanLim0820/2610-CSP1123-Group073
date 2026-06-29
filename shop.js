@@ -1,3 +1,7 @@
+if (!AuthStore.requireLogin()) {
+    throw new Error("Login required");
+}
+
 const bgMusic = new Audio("audio/shopMusic.mp3");
 bgMusic.loop = true;
 bgMusic.volume = 0.3;
@@ -97,7 +101,7 @@ function toggleMusic() {
 
 function resetGame(){
 
-    localStorage.clear();
+    AuthStore.clearCurrentSave();
 
     allowGamePageChange();
     location.reload();

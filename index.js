@@ -1,3 +1,7 @@
+if (!AuthStore.requireLogin()) {
+    throw new Error("Login required");
+}
+
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
 
@@ -411,14 +415,16 @@ function drawPlaceName() {
 
 function saveFarmReturnPosition(position) {
     // sessionStorage keeps this value when moving between pages in the same tab.
-    sessionStorage.setItem(farmReturnPositionKey, JSON.stringify(position))
+    sessionStorage.setItem(AuthStore.scopedSessionKey(farmReturnPositionKey), JSON.stringify(position))
 }
 
 function restoreFarmReturnPosition() {
-    const savedPosition = sessionStorage.getItem(farmReturnPositionKey)
+    // If the player did not come back from another page, there is nothing to restore.
+    const savedPosition = sessionStorage.getItem(AuthStore.scopedSessionKey(farmReturnPositionKey))
     if (!savedPosition) return
 
-    sessionStorage.removeItem(farmReturnPositionKey)
+    // Remove it after using it so a normal page refresh starts from the default place.
+    sessionStorage.removeItem(AuthStore.scopedSessionKey(farmReturnPositionKey))
 
     try {
         const position = JSON.parse(savedPosition)

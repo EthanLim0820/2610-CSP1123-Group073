@@ -1,3 +1,7 @@
+if (!AuthStore.requireLogin()) {
+  throw new Error("Login required");
+}
+
 let money = 0;
 let currentCustomer = null;
 let strikes = 0;
@@ -125,9 +129,9 @@ function resetStock() {
 }
 
 function loadStats() {
-  const saved = localStorage.getItem("petDiningStats");
+  const saved = StatsStore.getStats();
   if (saved) {
-    const s = JSON.parse(saved);
+    const s = saved;
     CustomerData.totalServed = s.totalServed || 0;
     CustomerData.excellentServed = s.excellentServed || 0;
     CustomerData.badServed = s.badServed || 0;
@@ -137,11 +141,11 @@ function loadStats() {
 }
 
 function saveStats() {
-  localStorage.setItem("petDiningStats", JSON.stringify({
+  StatsStore.saveStats({
     totalServed: CustomerData.totalServed,
     excellentServed: CustomerData.excellentServed,
     badServed: CustomerData.badServed
-  }));
+  });
 }
 
 function resetStats() {

@@ -1,3 +1,7 @@
+if (!AuthStore.requireLogin()) {
+    throw new Error("Login required");
+}
+
 const bgMusic = new Audio("audio/cookingMusic.mp3");
 
 bgMusic.loop = true;
