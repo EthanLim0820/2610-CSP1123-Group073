@@ -71,11 +71,53 @@ const AuthStore = {
     },
 
     requireLogin() {
-        if (this.isLoggedIn()) return true;
+        if (this.isLoggedIn()) {
+            this.showLogoutButton();
+            return true;
+        }
 
         allowGamePageChange();
         window.location.href = "startup.html";
         return false;
+    },
+
+    showLogoutButton() {
+        const addButton = () => {
+            if (document.getElementById("logoutButton")) return;
+
+            const button = document.createElement("button");
+            button.id = "logoutButton";
+            button.textContent = "Logout";
+            button.title = "Logout and switch account";
+            button.style.position = "fixed";
+            button.style.top = "12px";
+            button.style.right = "12px";
+            button.style.zIndex = "9999";
+            button.style.padding = "10px 14px";
+            button.style.border = "3px solid #ffffff";
+            button.style.borderRadius = "6px";
+            button.style.background = "#ff6767";
+            button.style.color = "#ffffff";
+            button.style.fontFamily = "sans-serif";
+            button.style.fontSize = "16px";
+            button.style.fontWeight = "800";
+            button.style.cursor = "pointer";
+            button.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.35)";
+
+            button.addEventListener("click", () => {
+                this.logout();
+                allowGamePageChange();
+                window.location.href = "startup.html";
+            });
+
+            document.body.appendChild(button);
+        };
+
+        if (document.body) {
+            addButton();
+        } else {
+            window.addEventListener("DOMContentLoaded", addButton, { once: true });
+        }
     },
 
     scopedKey(key) {
