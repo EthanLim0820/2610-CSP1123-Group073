@@ -2,6 +2,7 @@ if (!AuthStore.requireLogin()) {
     throw new Error("Login required");
 }
 
+
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
 
@@ -10,12 +11,14 @@ document.title = "Mini Gardening Pets Edition";
 document.body.style.margin = '0'
 document.body.style.overflow = 'hidden'
 
+//game size
 canvas.width = 1024
 canvas.height = 576
 canvas.style.width = '100vw'
 canvas.style.height = '100vh'
 canvas.style.display = 'block'
 
+//bgm and planting music
 const backgroundMusic = new Audio('./mini it/music/mini it music.mp3')
 backgroundMusic.loop = true
 backgroundMusic.volume = 0.10
@@ -29,6 +32,7 @@ function playBackgroundMusic() {
 
     if (playPromise) {
         playPromise.catch(() => {
+            // Try playing again after the first player interaction.
             window.addEventListener('keydown', playBackgroundMusic, { once: true })
             window.addEventListener('click', playBackgroundMusic, { once: true })
         })
@@ -38,6 +42,7 @@ function playBackgroundMusic() {
 playBackgroundMusic()
 
 
+//source
 const image = new Image()
 image.src = './mini it/image/gardening map.png'
 
@@ -69,6 +74,8 @@ const plantStage3Image = new Image()
 plantStage3Image.src = './mini it/image/corps/plant stage 3.png'
 
 const plantStages = [plantStage1Image, plantStage2Image, plantStage3Image]
+
+//crop image
 const cropImages = [
     './mini it/image/corps/c.red.png',
     './mini it/image/corps/c.yellow.png',
@@ -80,11 +87,15 @@ const cropImages = [
     image.src = src
     return image
 })
+
 const cropNames = ['Carrot', 'Corn', 'Lettuce', 'Wheat', 'Grass']
+
+//grow time
 const plantGrowthTime = 2000
 const cropGrowthTime = 3000
 
 
+//map
 const collisionsMap = []
 for (let i = 0; i < collisions.length; i += 70) {       // The map data is one long list, so this cuts it into rows of 70 tiles.
     collisionsMap.push(collisions.slice(i, 70 + i))
@@ -111,6 +122,7 @@ for (let i = 0; i < shop.length; i += 70) {
 }
 
 class Boundary {
+    //map tile
     static width = 48
     static height = 48
 
@@ -121,11 +133,13 @@ class Boundary {
     }
 
     draw() {
+        // Invisible collision box; change alpha above 0 to debug walls.
         c.fillStyle = 'rgba(255, 0, 0, 0.0)'
         c.fillRect(this.position.x, this.position.y, this.width, this.height)
     }
 }
 
+//sprite setting
 class Sprite {
     constructor({ position, image, frames = { max: 1, hold: 10 }, sprites }) {
         this.position = position
@@ -148,6 +162,7 @@ class Sprite {
     }
 
     draw() {
+        //draw crop on animation frame.
         const cropWidth = this.image.width / this.frames.max
         c.drawImage(
             this.image,
@@ -163,7 +178,7 @@ class Sprite {
 
         if (!this.animate || this.frames.max <= 1) return
 
-        this.frames.elapsed++   // Slow walking animation so frame does not change every refresh.
+        this.frames.elapsed++   //walking frame
         if (this.frames.elapsed % this.frames.hold === 0) {
             if (this.frames.val < this.frames.max - 1) {
                 this.frames.val++
@@ -174,6 +189,7 @@ class Sprite {
     }
 }
 
+//tileSprite for plant seed
 class TileSprite {
     constructor({ position, image, tileKey }) {
         this.position = position
@@ -194,12 +210,14 @@ class TileSprite {
     }
 
     grow() {
+        //planting stage
         plantStages.forEach((stageImage, index) => {
             setTimeout(() => {
                 this.image = stageImage
             }, plantGrowthTime * (index + 1))
         })
 
+        //random stage
         setTimeout(() => {
             const randomCropIndex = Math.floor(Math.random() * cropImages.length)
             this.image = cropImages[randomCropIndex]
@@ -209,11 +227,14 @@ class TileSprite {
 
 const boundaries = []
 const plantedSeeds = []
+
+//offset
 const offset = {
     x: -400,
     y: -515
 }
 
+//boundaries
 collisionsMap.forEach((row, i) => {
     row.forEach((symbol, j) => {
         if (symbol === 1025) {
@@ -229,6 +250,7 @@ collisionsMap.forEach((row, i) => {
     })
 })
 
+//player
 const player = new Sprite({
     position: {
         x: canvas.width / 2 - 192 / 4 / 2,
@@ -247,6 +269,7 @@ const player = new Sprite({
     }
 })
 
+//background
 const background = new Sprite({
     position: {
         x: offset.x,
@@ -255,6 +278,7 @@ const background = new Sprite({
     image: image
 })
 
+//foreground
 const foreground = new Sprite({
     position: {
         x: offset.x,
@@ -278,15 +302,21 @@ const keys = {
     }
 }
 
+//movables shift when the player walks
 const movables = [background, ...boundaries, foreground]
+
+//draw rendor
 const renderables = [background, ...boundaries, ...plantedSeeds, player, foreground]
 
+//movement speed
 const horizontalSpeed = 5
 const verticalSpeed = 4.4
 let changingPage = false
-// Key name used to save the farm position before going to another page.
+//save position
 const farmReturnPositionKey = 'farmReturnPosition'
 const placeDetectionDistance = 2
+
+//map array
 const placeAreas = [
     {
         name: 'Restaurant',
@@ -319,12 +349,12 @@ function rectangularCollision({ rectangle1, rectangle2 }) {
 
 function move({ x, y }) {
     let moving = true
-    // Save the map position before moving, so we can return here later.
     const previousPosition = {
         x: background.position.x,
         y: background.position.y
     }
 
+    //boundaries check
     for (let i = 0; i < boundaries.length; i++) {
         const boundary = boundaries[i]
 
@@ -351,12 +381,11 @@ function move({ x, y }) {
             movable.position.y += y
         })
 
-        // Check if the player stepped on a page-changing tile.
         checkPageChange(previousPosition)
     }
 }
 
-// Use the player's leg so planting where the character is standing.
+//use the player's leg so planting where the character is standing
 function getPlayerFarmTile() {
     const playerCenterX = player.position.x + player.width / 2
     const playerFeetY = player.position.y + player.height - 1
@@ -375,6 +404,7 @@ function getPlayerFarmTile() {
 function getNearbyPlaceName() {
     const { row, column } = getPlayerFarmTile()
 
+    //search nearby tiles for name
     for (const place of placeAreas) {
         for (let checkRow = row - placeDetectionDistance; checkRow <= row + placeDetectionDistance; checkRow++) {
             for (let checkColumn = column - placeDetectionDistance; checkColumn <= column + placeDetectionDistance; checkColumn++) {
@@ -389,6 +419,7 @@ function getNearbyPlaceName() {
 }
 
 function drawPlaceName() {
+    //show label
     const placeName = getNearbyPlaceName()
     if (!placeName) return
 
@@ -414,7 +445,6 @@ function drawPlaceName() {
 }
 
 function saveFarmReturnPosition(position) {
-    // sessionStorage keeps this value when moving between pages in the same tab.
     sessionStorage.setItem(AuthStore.scopedSessionKey(farmReturnPositionKey), JSON.stringify(position))
 }
 
@@ -427,10 +457,8 @@ function restoreFarmReturnPosition() {
     try {
         const position = JSON.parse(savedPosition)
 
-        // Only restore if the saved data is valid.
         if (typeof position.x !== 'number' || typeof position.y !== 'number') return
 
-        // Move the whole map back to the saved position.
         const xChange = position.x - background.position.x
         const yChange = position.y - background.position.y
 
@@ -444,6 +472,7 @@ function restoreFarmReturnPosition() {
 }
 
 function goToPage(page, returnPosition) {
+    //save farm position
     changingPage = true
     saveFarmReturnPosition(returnPosition)
     goToGamePage(page)
@@ -476,7 +505,7 @@ function plantSeed() {
         return
     }
 
-    // Place the seed at top-left corner of that farm tile.
+//seed image
     const seed = new TileSprite({
         position: {
             x: column * Boundary.width + background.position.x,
@@ -495,6 +524,7 @@ function plantSeed() {
 }
 
 function removeItem(array, item) {
+    //remove plant from array
     const index = array.indexOf(item)
 
     if (index !== -1) {
@@ -503,6 +533,7 @@ function removeItem(array, item) {
 }
 
 function harvestPlant() {
+//harvest only when on top
     const { tileKey } = getPlayerFarmTile()
     const plant = plantedSeeds.find((seed) => seed.tileKey === tileKey)
 
