@@ -148,18 +148,6 @@ function saveStats() {
   });
 }
 
-function resetStats() {
-  money = 0;
-  MoneyStore.saveMoney(money);
-  CustomerData.totalServed = 0;
-  CustomerData.excellentServed = 0;
-  CustomerData.badServed = 0;
-  saveStats();
-  document.getElementById("money").innerText = "Money: $0";
-  hideGameResultPopup();
-  updateFooter();
-}
-
 function showGameResultPopup(message) {
   document.getElementById("game-result-text").innerText = message;
   document.getElementById("game-complete").classList.add("show");
