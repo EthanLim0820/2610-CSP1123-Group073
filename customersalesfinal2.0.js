@@ -165,7 +165,7 @@ function showGameResultPopup(message) {
   document.getElementById("game-complete").classList.add("show");
 
   clearTimeout(resultPopupTimer);
-  resultPopupTimer = setTimeout(hideGameResultPopup, 1600);
+  resultPopupTimer = setTimeout(hideGameResultPopup, 5000);
 }
 
 function hideGameResultPopup() {
